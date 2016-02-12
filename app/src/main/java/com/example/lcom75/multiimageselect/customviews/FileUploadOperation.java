@@ -1,18 +1,20 @@
-/*
- * This is the source code of Telegram for Android v. 3.x.x.
- * It is licensed under GNU GPL v. 2 or later.
- * You should have received a copy of the license in this archive (see LICENSE).
- *
- * Copyright Nikolai Kudashov, 2013-2016.
- */
-
 package com.example.lcom75.multiimageselect.customviews;
 
+/**
+ * @author ParthS
+ * @since 5/10/15.
+ */
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.lcom75.multiimageselect.ApplicationLoader;
+import com.example.lcom75.multiimageselect.Utilities;
+import com.example.lcom75.multiimageselect.tgnet.ConnectionsManager;
+import com.example.lcom75.multiimageselect.tgnet.NativeByteBuffer;
+import com.example.lcom75.multiimageselect.tgnet.RequestDelegate;
+import com.example.lcom75.multiimageselect.tgnet.TLObject;
+import com.example.lcom75.multiimageselect.tgnet.TLRPC;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -60,10 +62,6 @@ public class FileUploadOperation {
         estimatedSize = estimated;
     }
 
-    public long getTotalFileSize() {
-        return totalFileSize;
-    }
-
     public void start() {
         if (state != 0) {
             return;
@@ -78,7 +76,7 @@ public class FileUploadOperation {
     }
 
     public void cancel() {
-        if (state == 3) {
+        if (state != 1) {
             return;
         }
         state = 2;
@@ -104,7 +102,7 @@ public class FileUploadOperation {
                 stream = null;
             }
         } catch (Exception e) {
-            Log.e("tmessages", e.getMessage());
+            Log.e("tmessages",e.getMessage());
         }
     }
 
@@ -165,7 +163,7 @@ public class FileUploadOperation {
                     try {
                         mdEnc = MessageDigest.getInstance("MD5");
                     } catch (NoSuchAlgorithmException e) {
-                        Log.e("tmessages", e.getMessage());
+                        Log.e("tmessages",e.getMessage());
                     }
                 }
 
@@ -293,7 +291,7 @@ public class FileUploadOperation {
                             fingerprint |= ((digest[a] ^ digest[a + 4]) & 0xFF) << (a * 8);
                         }
                     } catch (Exception e) {
-                        Log.e("tmessages", e.getMessage());
+                        Log.e("tmessages",e.getMessage());
                     }
                 }
             } else if (estimatedSize == 0) {
@@ -416,3 +414,4 @@ public class FileUploadOperation {
         }, 0, ConnectionsManager.ConnectionTypeUpload);
     }
 }
+

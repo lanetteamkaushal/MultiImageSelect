@@ -1,6 +1,7 @@
 package com.example.lcom75.multiimageselect;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,7 @@ import com.example.lcom75.multiimageselect.customviews.PhotoPickerAlbumsCell;
 import com.example.lcom75.multiimageselect.customviews.PhotoPickerSearchCell;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MultiImagePicker extends AppCompatActivity implements NotificationCenter.NotificationCenterDelegate {
 
@@ -30,6 +32,8 @@ public class MultiImagePicker extends AppCompatActivity implements NotificationC
     private boolean loading = false;
     private ArrayList<AndroidUtilities.SearchImage> recentWebImages = new ArrayList<>();
     private ArrayList<AndroidUtilities.SearchImage> recentGifImages = new ArrayList<>();
+    private HashMap<Integer, AndroidUtilities.PhotoEntry> selectedPhotos = new HashMap<>();
+    private HashMap<String, AndroidUtilities.SearchImage> selectedWebPhotos = new HashMap<>();
     private boolean allowGifs;
 
     @Override
@@ -226,6 +230,10 @@ public class MultiImagePicker extends AppCompatActivity implements NotificationC
                 recentImages = recentGifImages;
             }
         }
+        Intent intent = new Intent(MultiImagePicker.this,PhotoPickerActivity.class);
+        ApplicationLoader.albumEntry = albumEntry;
+        ApplicationLoader.selectedPhotos = selectedPhotos;
+        startActivityForResult(intent,4444);
 //        PhotoPickerActivity fragment = new PhotoPickerActivity(type, albumEntry, selectedPhotos, selectedWebPhotos, recentImages, singlePhoto, chatActivity);
 //        fragment.setDelegate(new PhotoPickerActivity.PhotoPickerActivityDelegate() {
 //            @Override
@@ -251,4 +259,11 @@ public class MultiImagePicker extends AppCompatActivity implements NotificationC
 //        });
 //        presentFragment(fragment);
     }
+
+//    public void removeSelfFromStack() {
+//        if (isFinished || parentLayout == null) {
+//            return;
+//        }
+//        parentLayout.removeFragmentFromStack(this);
+//    }
 }

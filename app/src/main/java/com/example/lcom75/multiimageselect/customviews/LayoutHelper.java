@@ -15,6 +15,7 @@ import android.widget.ScrollView;
 
 import com.example.lcom75.multiimageselect.AndroidUtilities;
 
+
 public class LayoutHelper {
 
     public static final int MATCH_PARENT = -1;

@@ -10,6 +10,12 @@ package com.example.lcom75.multiimageselect.customviews;
 
 import android.util.Log;
 
+import com.example.lcom75.multiimageselect.Utilities;
+import com.example.lcom75.multiimageselect.tgnet.ConnectionsManager;
+import com.example.lcom75.multiimageselect.tgnet.RequestDelegate;
+import com.example.lcom75.multiimageselect.tgnet.TLObject;
+import com.example.lcom75.multiimageselect.tgnet.TLRPC;
+
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
@@ -243,7 +249,7 @@ public class FileLoadOperation {
             }
 
             if (true) {
-                Log.d("tmessages", "start loading file to temp = " + cacheFileTemp + " final = " + cacheFileFinal);
+               Log.d("tmessages", "start loading file to temp = " + cacheFileTemp + " final = " + cacheFileFinal);
             }
 
             if (fileNameIv != null) {
@@ -257,7 +263,7 @@ public class FileLoadOperation {
                         downloadedBytes = 0;
                     }
                 } catch (Exception e) {
-                   Log.e("tmessages", e.getMessage());
+                    Log.e("tmessages", e.getMessage());
                     downloadedBytes = 0;
                 }
             }
@@ -267,7 +273,7 @@ public class FileLoadOperation {
                     fileOutputStream.seek(downloadedBytes);
                 }
             } catch (Exception e) {
-               Log.e("tmessages", e.getMessage());
+                Log.e("tmessages", e.getMessage());
             }
             if (fileOutputStream == null) {
                 cleanup();
@@ -329,13 +335,13 @@ public class FileLoadOperation {
                 try {
                     fileOutputStream.getChannel().close();
                 } catch (Exception e) {
-                   Log.e("tmessages", e.getMessage());
+                    Log.e("tmessages", e.getMessage());
                 }
                 fileOutputStream.close();
                 fileOutputStream = null;
             }
         } catch (Exception e) {
-           Log.e("tmessages", e.getMessage());
+            Log.e("tmessages", e.getMessage());
         }
 
         try {
@@ -344,7 +350,7 @@ public class FileLoadOperation {
                 fiv = null;
             }
         } catch (Exception e) {
-           Log.e("tmessages", e.getMessage());
+            Log.e("tmessages", e.getMessage());
         }
         if (delayedRequestInfos != null) {
             for (int a = 0; a < delayedRequestInfos.size(); a++) {
@@ -372,7 +378,7 @@ public class FileLoadOperation {
             boolean renameResult = cacheFileTemp.renameTo(cacheFileFinal);
             if (!renameResult) {
                 if (true) {
-                   Log.e("tmessages", "unable to rename temp = " + cacheFileTemp + " to final = " + cacheFileFinal + " retry = " + renameRetryCount);
+                    Log.e("tmessages", "unable to rename temp = " + cacheFileTemp + " to final = " + cacheFileFinal + " retry = " + renameRetryCount);
                 }
                 renameRetryCount++;
                 if (renameRetryCount < 3) {
@@ -393,7 +399,7 @@ public class FileLoadOperation {
             }
         }
         if (true) {
-           Log.e("tmessages", "finished downloading file to " + cacheFileFinal);
+            Log.e("tmessages", "finished downloading file to " + cacheFileFinal);
         }
         delegate.didFinishLoadingFile(FileLoadOperation.this, cacheFileFinal);
     }
@@ -454,7 +460,7 @@ public class FileLoadOperation {
             } catch (Exception e) {
                 cleanup();
                 delegate.didFailedLoadingFile(FileLoadOperation.this, 0);
-               Log.e("tmessages", e.getMessage());
+                Log.e("tmessages", e.getMessage());
             }
         } else {
             if (error.text.contains("FILE_MIGRATE_")) {
@@ -480,7 +486,7 @@ public class FileLoadOperation {
                     try {
                         onFinishLoadingFile();
                     } catch (Exception e) {
-                       Log.e("tmessages", e.getMessage());
+                        Log.e("tmessages", e.getMessage());
                         cleanup();
                         delegate.didFailedLoadingFile(FileLoadOperation.this, 0);
                     }
@@ -493,7 +499,7 @@ public class FileLoadOperation {
                 delegate.didFailedLoadingFile(FileLoadOperation.this, 2);
             } else {
                 if (location != null) {
-                   Log.e("tmessages", "" + location + " id = " + location.id + " local_id = " + location.local_id + " access_hash = " + location.access_hash + " volume_id = " + location.volume_id + " secret = " + location.secret);
+                    Log.e("tmessages", "" + location + " id = " + location.id + " local_id = " + location.local_id + " access_hash = " + location.access_hash + " volume_id = " + location.volume_id + " secret = " + location.secret);
                 }
                 cleanup();
                 delegate.didFailedLoadingFile(FileLoadOperation.this, 0);

@@ -123,8 +123,10 @@ public class PhotoPickerAlbumsCell extends FrameLayoutFixed {
             if (albumEntry.coverPhoto != null && albumEntry.coverPhoto.path != null) {
                 albumView.imageView.setOrientation(albumEntry.coverPhoto.orientation, true);
                 if (albumEntry.coverPhoto.isVideo) {
+//                    com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage("file://" + albumEntry.coverPhoto.path, albumView.imageView);
                     albumView.imageView.setImage("vthumb://" + albumEntry.coverPhoto.imageId + ":" + albumEntry.coverPhoto.path, null, getContext().getResources().getDrawable(R.drawable.nophotos));
                 } else {
+//                    com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage("file://" + albumEntry.coverPhoto.path, albumView.imageView);
                     albumView.imageView.setImage("thumb://" + albumEntry.coverPhoto.imageId + ":" + albumEntry.coverPhoto.path, null, getContext().getResources().getDrawable(R.drawable.nophotos));
                 }
             } else {

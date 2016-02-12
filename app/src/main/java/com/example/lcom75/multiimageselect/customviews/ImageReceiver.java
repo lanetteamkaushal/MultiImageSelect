@@ -24,7 +24,10 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 
+import com.example.lcom75.multiimageselect.AndroidUtilities;
 import com.example.lcom75.multiimageselect.NotificationCenter;
+import com.example.lcom75.multiimageselect.tgnet.TLObject;
+import com.example.lcom75.multiimageselect.tgnet.TLRPC;
 
 public class ImageReceiver implements NotificationCenter.NotificationCenterDelegate {
 
@@ -134,10 +137,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             setImageBackup.thumb = null;
         }
 
-        if ((fileLocation == null && httpUrl == null && thumbLocation == null)
-                || (fileLocation != null && !(fileLocation instanceof TLRPC.TL_fileLocation)
-                && !(fileLocation instanceof TLRPC.TL_fileEncryptedLocation)
-                && !(fileLocation instanceof TLRPC.TL_document))) {
+        if ((fileLocation == null && httpUrl == null && thumbLocation == null)) {
             recycleBitmap(null, false);
             recycleBitmap(null, true);
             currentKey = null;
@@ -174,19 +174,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
         String key = null;
         if (fileLocation != null) {
-            if (fileLocation instanceof TLRPC.FileLocation) {
-                TLRPC.FileLocation location = (TLRPC.FileLocation) fileLocation;
-                key = location.volume_id + "_" + location.local_id;
-            } else {
-                TLRPC.Document location = (TLRPC.Document) fileLocation;
-                if (location.dc_id != 0) {
-                    key = location.dc_id + "_" + location.id;
-                } else {
-                    fileLocation = null;
-                }
-            }
+
         } else if (httpUrl != null) {
-            key = Utilities.MD5(httpUrl);
+            key = AndroidUtilities.MD5(httpUrl);
         }
         if (key != null) {
             if (filter != null) {
@@ -763,14 +753,6 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     public int getRoundRadius() {
         return roundRadius;
     }
-
-//    public void setParentMessageObject(MessageObject messageObject) {
-//        parentMessageObject = messageObject;
-//    }
-//
-//    public MessageObject getParentMessageObject() {
-//        return parentMessageObject;
-//    }
 
     public void setNeedsQualityThumb(boolean value) {
         needsQualityThumb = value;

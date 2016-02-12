@@ -29,7 +29,13 @@ import android.util.Log;
 
 import com.example.lcom75.multiimageselect.AndroidUtilities;
 import com.example.lcom75.multiimageselect.ApplicationLoader;
+import com.example.lcom75.multiimageselect.Bitmaps;
+import com.example.lcom75.multiimageselect.MediaController;
 import com.example.lcom75.multiimageselect.NotificationCenter;
+import com.example.lcom75.multiimageselect.Utilities;
+import com.example.lcom75.multiimageselect.tgnet.ConnectionsManager;
+import com.example.lcom75.multiimageselect.tgnet.TLObject;
+import com.example.lcom75.multiimageselect.tgnet.TLRPC;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -1188,7 +1194,7 @@ public class ImageLoader {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (telegramPath != null && finalFile != null && (location.endsWith(".mp4") || location.endsWith(".jpg"))) {
+                        if (MediaController.getInstance().canSaveToGallery() && telegramPath != null && finalFile != null && (location.endsWith(".mp4") || location.endsWith(".jpg"))) {
                             if (finalFile.toString().startsWith(telegramPath.toString())) {
                                 AndroidUtilities.addMediaToGallery(finalFile.toString());
                             }
@@ -1373,7 +1379,7 @@ public class ImageLoader {
             } else {
                 Log.e("tmessages", "this Android can't rename files");
             }
-//            MediaController.getInstance().checkSaveToGalleryFiles();
+            MediaController.getInstance().checkSaveToGalleryFiles();
         } catch (Exception e) {
             Log.e("tmessages", e.getMessage());
         }
@@ -1670,39 +1676,11 @@ public class ImageLoader {
                                 cacheFile = null;
                             }
                         }
-
-//                        if (parentMessageObject != null) {
-//                            File attachPath = null;
-//                            if (parentMessageObject.messageOwner.attachPath != null && parentMessageObject.messageOwner.attachPath.length() > 0) {
-//                                attachPath = new File(parentMessageObject.messageOwner.attachPath);
-//                                if (!attachPath.exists()) {
-//                                    attachPath = null;
-//                                }
-//                            }
-//                            if (attachPath == null) {
-//                                attachPath = FileLoader.getPathToMessage(parentMessageObject.messageOwner);
-//                            }
-//                            if (finalIsNeedsQualityThumb && cacheFile == null) {
-//                                String location = parentMessageObject.getFileName();
-//                                ThumbGenerateInfo info = waitingForQualityThumb.get(location);
-//                                if (info == null) {
-//                                    info = new ThumbGenerateInfo();
-//                                    info.fileLocation = (TLRPC.TL_fileLocation) imageLocation;
-//                                    info.filter = filter;
-//                                    waitingForQualityThumb.put(location, info);
-//                                }
-//                                info.count++;
-//                                waitingForQualityThumbByTag.put(finalTag, location);
-//                            }
-//                            if (attachPath.exists() && shouldGenerateQualityThumb) {
-//                                generateThumb(parentMessageObject.getFileType(), attachPath, (TLRPC.TL_fileLocation) imageLocation, filter);
-//                            }
-//                        }
                     }
 
                     if (thumb != 2) {
                         CacheImage img = new CacheImage();
-                        if (httpLocation != null && (httpLocation.endsWith("mp4") || httpLocation.endsWith("gif")) || imageLocation instanceof TLRPC.Document && MessageObject.isGifDocument((TLRPC.Document) imageLocation)) {
+                        if (httpLocation != null && (httpLocation.endsWith("mp4") || httpLocation.endsWith("gif")) || imageLocation instanceof TLRPC.Document) {
                             img.animatedFile = true;
                         }
 
@@ -1762,7 +1740,6 @@ public class ImageLoader {
         if (imageReceiver == null) {
             return;
         }
-
         String key = imageReceiver.getKey();
         if (key != null) {
             BitmapDrawable bitmapDrawable = memCache.get(key);
@@ -1784,13 +1761,10 @@ public class ImageLoader {
                 thumbSet = true;
             }
         }
-
         TLRPC.FileLocation thumbLocation = imageReceiver.getThumbLocation();
         TLObject imageLocation = imageReceiver.getImageLocation();
         String httpLocation = imageReceiver.getHttpImageLocation();
-
         boolean saveImageToCache = false;
-
         String url = null;
         String thumbUrl = null;
         key = null;
@@ -1800,7 +1774,7 @@ public class ImageLoader {
             ext = "jpg";
         }
         if (httpLocation != null) {
-            key = Utilities.MD5(httpLocation);
+            key = AndroidUtilities.MD5(httpLocation);
             url = key + "." + getHttpUrlExtension(httpLocation);
         } else if (imageLocation != null) {
             if (imageLocation instanceof TLRPC.FileLocation) {
@@ -1830,7 +1804,7 @@ public class ImageLoader {
                 if (thumbKey != null) {
                     thumbUrl = thumbKey + "." + ext;
                 }
-                saveImageToCache = !MessageObject.isGifDocument(document);
+                saveImageToCache = true;
             }
             if (imageLocation == thumbLocation) {
                 imageLocation = null;

@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class ApplicationLoader extends Application {
 
@@ -25,6 +26,8 @@ public class ApplicationLoader extends Application {
 
     public static int GENERAL_TRACKER = 0;
     public static Handler applicationHandler;
+    public static AndroidUtilities.AlbumEntry albumEntry = null;
+    public static HashMap<Integer, AndroidUtilities.PhotoEntry> selectedPhotos = new HashMap<>();
 
     public static File getFilesDirFixed() {
         for (int a = 0; a < 10; a++) {
