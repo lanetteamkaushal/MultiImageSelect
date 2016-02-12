@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MultiImageSelect</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_multi_image_picker">MultiImagePicker</string>
+</resources>
