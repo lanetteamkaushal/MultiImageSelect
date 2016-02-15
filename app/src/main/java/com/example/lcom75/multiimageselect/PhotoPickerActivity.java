@@ -148,9 +148,6 @@ public class PhotoPickerActivity extends AppCompatActivity implements View.OnCli
                     if (i < 0 || i >= arrayList.size()) {
                         return;
                     }
-//                    if (searchItem != null) {
-//                        AndroidUtilities.hideKeyboard(searchItem.getSearchField());
-//                    }
                     PhotoViewer.getInstance().setParentActivity(PhotoPickerActivity.this);
                     PhotoViewer.getInstance().openPhotoForSelect(arrayList, i, singlePhoto ? 1 : 0, PhotoPickerActivity.this, PhotoPickerActivity.this);
                 }

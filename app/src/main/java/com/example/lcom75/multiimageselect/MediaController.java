@@ -44,9 +44,7 @@ public class MediaController {
     private final static int PROCESSOR_TYPE_MTK = 3;
     private final static int PROCESSOR_TYPE_SEC = 4;
     private final static int PROCESSOR_TYPE_TI = 5;
-
     private boolean saveToGallery = true;
-
     public static MediaController getInstance() {
         MediaController localInstance = Instance;
         if (localInstance == null) {

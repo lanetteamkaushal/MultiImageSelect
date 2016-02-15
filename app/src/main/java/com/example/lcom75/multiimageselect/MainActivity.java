@@ -9,8 +9,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
+
+import com.example.lcom75.multiimageselect.customviews.ChatAttachView;
 
 public class MainActivity extends AppCompatActivity {
+
+    FrameLayout frameLayout;
+    ChatAttachView chatAttachView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +33,11 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        startActivity(new Intent(MainActivity.this,MultiImagePicker.class));
+        frameLayout = (FrameLayout) findViewById(R.id.chatAttachView);
+        chatAttachView = new ChatAttachView(this);
+        chatAttachView.init(this);
+        frameLayout.addView(chatAttachView);
+//        startActivity(new Intent(MainActivity.this,MultiImagePicker.class));
     }
 
     @Override

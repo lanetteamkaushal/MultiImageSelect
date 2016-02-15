@@ -1,4 +1,5 @@
-package com.example.lcom75.multiimageselect.customviews;/*
+package com.example.lcom75.multiimageselect.customviews;
+/*
  * This is the source code of Telegram for Android v. 3.x.x.
  * It is licensed under GNU GPL v. 2 or later.
  * You should have received a copy of the license in this archive (see LICENSE).
@@ -6,7 +7,6 @@ package com.example.lcom75.multiimageselect.customviews;/*
  * Copyright Nikolai Kudashov, 2013-2016.
  */
 
-import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -16,8 +16,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -27,10 +25,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.provider.Browser;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -46,32 +41,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.example.lcom75.multiimageselect.AndroidUtilities;
 import com.example.lcom75.multiimageselect.ApplicationLoader;
 import com.example.lcom75.multiimageselect.MainActivity;
-import com.example.lcom75.multiimageselect.MediaController;
 import com.example.lcom75.multiimageselect.NotificationCenter;
 import com.example.lcom75.multiimageselect.R;
 import com.example.lcom75.multiimageselect.Utilities;
-import com.example.lcom75.multiimageselect.customviews.CheckBox;
-import com.example.lcom75.multiimageselect.customviews.ClippingImageView;
-import com.example.lcom75.multiimageselect.customviews.FileLoader;
-import com.example.lcom75.multiimageselect.customviews.ImageReceiver;
-import com.example.lcom75.multiimageselect.customviews.PhotoCropView;
 import com.example.lcom75.multiimageselect.tgnet.ConnectionsManager;
 import com.example.lcom75.multiimageselect.tgnet.TLRPC;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -100,7 +85,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private ImageView shareButton;
     private BackgroundDrawable backgroundDrawable = new BackgroundDrawable(0xff000000);
     private CheckBox checkImageView;
-//    private View pickerView;
+    //    private View pickerView;
 //    private View editorDoneLayout;
     private RadialProgressView radialProgressViews[] = new RadialProgressView[3];
     private MenuItem cropItem;
@@ -122,8 +107,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private float animationValues[][] = new float[2][8];
 
     private Activity parentChatActivity;
-    //    private MentionsAdapter mentionsAdapter;
-//    private RecyclerListView mentionListView;
     private LinearLayoutManager mentionLayoutManager;
     private AnimatorSet mentionListAnimation;
     private boolean allowMentions;
@@ -763,10 +746,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         if (progressDrawables == null) {
             progressDrawables = new Drawable[4];
-//            progressDrawables[0] = parentActivity.getResources().getDrawable(R.drawable.circle_big);
-//            progressDrawables[1] = parentActivity.getResources().getDrawable(R.drawable.cancel_big);
-//            progressDrawables[2] = parentActivity.getResources().getDrawable(R.drawable.load_big);
-//            progressDrawables[3] = parentActivity.getResources().getDrawable(R.drawable.play_big);
         }
 
         scroller = new Scroller(activity);
@@ -776,10 +755,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             @Override
             public boolean dispatchKeyEventPreIme(KeyEvent event) {
                 if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-//                    if (captionEditText.isPopupShowing() || captionEditText.isKeyboardVisible()) {
-//                        closeCaptionEnter(false);
-//                        return false;
-//                    }
                     PhotoViewer.getInstance().closePhoto(true, false);
                     return true;
                 }
@@ -804,231 +779,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         windowLayoutParams.gravity = Gravity.TOP;
         windowLayoutParams.type = WindowManager.LayoutParams.LAST_APPLICATION_WINDOW;
         windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-
-//        actionBar = new ActionBar(activity);
-//        actionBar.setBackgroundColor(0x7F000000);
-//        actionBar.setOccupyStatusBar(false);
-//        actionBar.setItemsBackground(R.drawable.bar_selector_white);
-//        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-//        actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, 1, 1));
-//        containerView.addView(actionBar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-//
-//        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-//            @Override
-//            public void onItemClick(int id) {
-//                if (id == -1) {
-//                    if (needCaptionLayout && (captionEditText.isPopupShowing() || captionEditText.isKeyboardVisible())) {
-//                        closeCaptionEnter(false);
-//                        return;
-//                    }
-//                    closePhoto(true, false);
-//                } else if (id == gallery_menu_save) {
-//                    if (Build.VERSION.SDK_INT >= 23 && parentActivity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//                        parentActivity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4);
-//                        return;
-//                    }
-//
-//                    File f = null;
-//                    if (currentObject != null) {
-//                        f = FileLoader.getPathToMessage(currentObject.messageOwner);
-//                    } else if (currentFileLocation != null) {
-//                        f = FileLoader.getPathToAttach(currentFileLocation, avatarsUserId != 0);
-//                    }
-//
-//                    if (f != null && f.exists()) {
-//                        MediaController.saveFile(f.toString(), parentActivity, currentFileNames[0].endsWith("mp4") ? 1 : 0, null);
-//                    } else {
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
-//                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-//                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-//                        builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
-//                        showAlertDialog(builder);
-//                    }
-//                } else if (id == gallery_menu_showall) {
-//                    if (opennedFromMedia) {
-//                        closePhoto(true, false);
-//                    } else if (currentDialogId != 0) {
-//                        disableShowCheck = true;
-//                        closePhoto(false, false);
-//                        Bundle args2 = new Bundle();
-//                        args2.putLong("dialog_id", currentDialogId);
-//                        ((LaunchActivity) parentActivity).presentFragment(new MediaActivity(args2), false, true);
-//                    }
-//                } else if (id == gallery_menu_send) {
-//                    /*Intent intent = new Intent(this, MessagesActivity.class);
-//                    intent.putExtra("onlySelect", true);
-//                    startActivityForResult(intent, 10);
-//                    if (requestCode == 10) {
-//                        int chatId = data.getIntExtra("chatId", 0);
-//                        int userId = data.getIntExtra("userId", 0);
-//                        int dialog_id = 0;
-//                        if (chatId != 0) {
-//                            dialog_id = -chatId;
-//                        } else if (userId != 0) {
-//                            dialog_id = userId;
-//                        }
-//                        TLRPC.FileLocation location = getCurrentFile();
-//                        if (dialog_id != 0 && location != null) {
-//                            Intent intent = new Intent(GalleryImageViewer.this, ChatActivity.class);
-//                            if (chatId != 0) {
-//                                intent.putExtra("chatId", chatId);
-//                            } else {
-//                                intent.putExtra("userId", userId);
-//                            }
-//                            startActivity(intent);
-//                            NotificationCenter.getInstance().postNotificationName(MessagesController.closeChats);
-//                            finish();
-//                            if (withoutBottom) {
-//                                MessagesController.getInstance().sendMessage(location, dialog_id);
-//                            } else {
-//                                int item = mViewPager.getCurrentItem();
-//                                Object obj = localPagerAdapter.imagesArr.get(item);
-//                                MessagesController.getInstance().sendMessage(obj, dialog_id);
-//                            }
-//                        }
-//                    }*/
-//                } else if (id == gallery_menu_crop) {
-//                    switchToEditMode(1);
-//                } else if (id == gallery_menu_tune) {
-//                    switchToEditMode(2);
-//                } else if (id == gallery_menu_delete) {
-//                    if (parentActivity == null) {
-//                        return;
-//                    }
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
-//                    if (currentFileNames[0] != null && currentFileNames[0].endsWith("mp4")) {
-//                        builder.setMessage(LocaleController.formatString("AreYouSureDeleteVideo", R.string.AreYouSureDeleteVideo));
-//                    } else {
-//                        builder.setMessage(LocaleController.formatString("AreYouSureDeletePhoto", R.string.AreYouSureDeletePhoto));
-//                    }
-//                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-//                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            if (!imagesArr.isEmpty()) {
-//                                if (currentIndex < 0 || currentIndex >= imagesArr.size()) {
-//                                    return;
-//                                }
-//                                Object obj = imagesArr.get(currentIndex);
-//                                if (obj.isSent()) {
-//                                    ArrayList<Integer> arr = new ArrayList<>();
-//                                    arr.add(obj.getId());
-//
-//                                    ArrayList<Long> random_ids = null;
-//                                    TLRPC.EncryptedChat encryptedChat = null;
-//                                    if ((int) obj.getDialogId() == 0 && obj.messageOwner.random_id != 0) {
-//                                        random_ids = new ArrayList<>();
-//                                        random_ids.add(obj.messageOwner.random_id);
-//                                        encryptedChat = MessagesController.getInstance().getEncryptedChat((int) (obj.getDialogId() >> 32));
-//                                    }
-//
-//                                    MessagesController.getInstance().deleteMessages(arr, random_ids, encryptedChat, obj.messageOwner.to_id.channel_id);
-//                                    closePhoto(false, false);
-//                                }
-//                            } else if (!avatarsArr.isEmpty()) {
-//                                if (currentIndex < 0 || currentIndex >= avatarsArr.size()) {
-//                                    return;
-//                                }
-//                                TLRPC.Photo photo = avatarsArr.get(currentIndex);
-//                                TLRPC.FileLocation currentLocation = imagesArrLocations.get(currentIndex);
-//                                if (photo instanceof TLRPC.TL_photoEmpty) {
-//                                    photo = null;
-//                                }
-//                                boolean current = false;
-//                                if (currentUserAvatarLocation != null) {
-//                                    if (photo != null) {
-//                                        for (TLRPC.PhotoSize size : photo.sizes) {
-//                                            if (size.location.local_id == currentUserAvatarLocation.local_id && size.location.volume_id == currentUserAvatarLocation.volume_id) {
-//                                                current = true;
-//                                                break;
-//                                            }
-//                                        }
-//                                    } else if (currentLocation.local_id == currentUserAvatarLocation.local_id && currentLocation.volume_id == currentUserAvatarLocation.volume_id) {
-//                                        current = true;
-//                                    }
-//                                }
-//                                if (current) {
-//                                    MessagesController.getInstance().deleteUserPhoto(null);
-//                                    closePhoto(false, false);
-//                                } else if (photo != null) {
-//                                    TLRPC.TL_inputPhoto inputPhoto = new TLRPC.TL_inputPhoto();
-//                                    inputPhoto.id = photo.id;
-//                                    inputPhoto.access_hash = photo.access_hash;
-//                                    MessagesController.getInstance().deleteUserPhoto(inputPhoto);
-//                                    MessagesStorage.getInstance().clearUserPhoto(avatarsUserId, photo.id);
-//                                    imagesArrLocations.remove(currentIndex);
-//                                    imagesArrLocationsSizes.remove(currentIndex);
-//                                    avatarsArr.remove(currentIndex);
-//                                    if (imagesArrLocations.isEmpty()) {
-//                                        closePhoto(false, false);
-//                                    } else {
-//                                        int index = currentIndex;
-//                                        if (index >= avatarsArr.size()) {
-//                                            index = avatarsArr.size() - 1;
-//                                        }
-//                                        currentIndex = -1;
-//                                        setImageIndex(index, true);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    });
-//                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-//                    showAlertDialog(builder);
-//                } else if (id == gallery_menu_caption) {
-//                    if (imageMoveAnimation != null || changeModeAnimation != null) {
-//                        return;
-//                    }
-//                    cropItem.setVisibility(View.GONE);
-//                    tuneItem.setVisibility(View.GONE);
-//                    captionItem.setVisibility(View.GONE);
-//                    checkImageView.setVisibility(View.GONE);
-//                    captionDoneItem.setVisibility(View.VISIBLE);
-//                    pickerView.setVisibility(View.GONE);
-//                    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) captionEditText.getLayoutParams();
-//                    layoutParams.bottomMargin = 0;
-//                    captionEditText.setLayoutParams(layoutParams);
-//                    layoutParams = (FrameLayout.LayoutParams) mentionListView.getLayoutParams();
-//                    layoutParams.bottomMargin = 0;
-//                    mentionListView.setLayoutParams(layoutParams);
-//                    captionTextView.clearAnimation();
-//                    captionTextView.setVisibility(View.INVISIBLE);
-//                    captionEditText.openKeyboard();
-//                    lastTitle = actionBar.getTitle();
-//                    actionBar.setTitle(LocaleController.getString("PhotoCaption", R.string.PhotoCaption));
-//                } else if (id == gallery_menu_caption_done) {
-//                    closeCaptionEnter(true);
-//                }
-//            }
-//
-//            @Override
-//            public boolean canOpenMenu() {
-//                if (currentObject != null) {
-//                    File f = FileLoader.getPathToMessage(currentObject.messageOwner);
-//                    if (f.exists()) {
-//                        return true;
-//                    }
-//                } else if (currentFileLocation != null) {
-//                    File f = FileLoader.getPathToAttach(currentFileLocation, avatarsUserId != 0);
-//                    if (f.exists()) {
-//                        return true;
-//                    }
-//                }
-//                return false;
-//            }
-//        });
-//
-//        ActionBarMenu menu = actionBar.createMenu();
-//
-//        menuItem = menu.addItem(0, R.drawable.ic_ab_other);
-//        menuItem.addSubItem(gallery_menu_showall, LocaleController.getString("ShowAllMedia", R.string.ShowAllMedia), 0);
-//        menuItem.addSubItem(gallery_menu_save, LocaleController.getString("SaveToGallery", R.string.SaveToGallery), 0);
-//        menuItem.addSubItem(gallery_menu_delete, LocaleController.getString("Delete", R.string.Delete), 0);
-//
-//        captionDoneItem = menu.addItemWithWidth(gallery_menu_caption_done, R.drawable.ic_done, AndroidUtilities.dp(56));
-//        captionItem = menu.addItemWithWidth(gallery_menu_caption, R.drawable.photo_text, AndroidUtilities.dp(56));
-//        cropItem = menu.addItemWithWidth(gallery_menu_crop, R.drawable.photo_crop, AndroidUtilities.dp(56));
-//        tuneItem = menu.addItemWithWidth(gallery_menu_tune, R.drawable.photo_tools, AndroidUtilities.dp(56));
 
         bottomLayout = new FrameLayout(parentActivity);
         bottomLayout.setBackgroundColor(0x7f000000);
@@ -1064,58 +814,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         radialProgressViews[2].setBackgroundState(0, false);
 
         shareButton = new ImageView(containerView.getContext());
-//        shareButton.setImageResource(R.drawable.share);
         shareButton.setScaleType(ImageView.ScaleType.CENTER);
-//        shareButton.setBackgroundResource(R.drawable.bar_selector_white);
         bottomLayout.addView(shareButton, LayoutHelper.createFrame(50, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.RIGHT));
-//        shareButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (parentActivity == null) {
-//                    return;
-//                }
-//                try {
-//                    File f = null;
-//
-//                    if (currentObject != null) {
-//                        if (currentObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage) {
-//                            Uri uri = Uri.parse(currentObject.messageOwner.media.webpage.url);
-//                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//                            intent.putExtra(Browser.EXTRA_APPLICATION_ID, parentActivity.getPackageName());
-//                            parentActivity.startActivity(intent);
-//                            return;
-//                        }
-//                        f = FileLoader.getPathToMessage(currentObject.messageOwner);
-//                    } else if (currentFileLocation != null) {
-//                        f = FileLoader.getPathToAttach(currentFileLocation, avatarsUserId != 0);
-//                    }
-//
-//                    if (f.exists()) {
-//                        Intent intent = new Intent(Intent.ACTION_SEND);
-//                        if (f.toString().endsWith("mp4")) {
-//                            intent.setType("video/mp4");
-//                        } else {
-//                            intent.setType("image/jpeg");
-//                        }
-//                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));
-//
-//                        parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
-//                    } else {
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
-//                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-//                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-//                        builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
-//                        showAlertDialog(builder);
-//                    }
-//                } catch (Exception e) {
-//                    FileLog.e("tmessages", e);
-//                }
-//            }
-//        });
-
         nameTextView = new TextView(containerView.getContext());
         nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-//        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+
         nameTextView.setSingleLine(true);
         nameTextView.setMaxLines(1);
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
@@ -1129,58 +832,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         dateTextView.setMaxLines(1);
         dateTextView.setEllipsize(TextUtils.TruncateAt.END);
         dateTextView.setTextColor(0xffffffff);
-//        dateTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         dateTextView.setGravity(Gravity.LEFT);
         bottomLayout.addView(dateTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 16, 25, 50, 0));
-
-//        pickerView = new PickerBottomLayout(parentActivity);
-//        pickerView.setBackgroundColor(0x7f000000);
-//        containerView.addView(pickerView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.BOTTOM | Gravity.LEFT));
-//        pickerView.cancelButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (placeProvider != null) {
-//                    closePhoto(!placeProvider.cancelButtonPressed(), false);
-//                }
-//            }
-//        });
-//        pickerView.doneButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (placeProvider != null) {
-//                    placeProvider.sendButtonPressed(currentIndex);
-//                    closePhoto(false, false);
-//                }
-//            }
-//        });
-
-//        editorDoneLayout = new PickerBottomLayout(parentActivity);
-//        editorDoneLayout.setBackgroundColor(0x7f000000);
-//        editorDoneLayout.updateSelectedCount(0, false);
-//        editorDoneLayout.setVisibility(View.GONE);
-//        containerView.addView(editorDoneLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM));
-//        editorDoneLayout.cancelButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (currentEditMode == 1) {
-//                    photoCropView.cancelAnimationRunnable();
-//                }
-//                switchToEditMode(0);
-//            }
-//        });
-//        editorDoneLayout.doneButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (currentEditMode == 1) {
-//                    photoCropView.cancelAnimationRunnable();
-//                    if (imageMoveAnimation != null) {
-//                        return;
-//                    }
-//                }
-//                applyCurrentEditMode();
-//                switchToEditMode(0);
-//            }
-//        });
 
         gestureDetector = new GestureDetector(containerView.getContext(), this);
         gestureDetector.setOnDoubleTapListener(this);
@@ -1215,321 +868,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
             }
         });
-
-//        captionEditText = new PhotoViewerCaptionEnterView(parentActivity, containerView);
-//        captionEditText.setDelegate(new PhotoViewerCaptionEnterView.PhotoViewerCaptionEnterViewDelegate() {
-//            @Override
-//            public void onCaptionEnter() {
-//                closeCaptionEnter(true);
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence text) {
-//                if (mentionsAdapter != null && captionEditText != null && parentChatActivity != null && text != null) {
-//                    mentionsAdapter.searchUsernameOrHashtag(text.toString(), captionEditText.getCursorPosition(), parentChatActivity.messages);
-//                }
-//            }
-//
-//            @Override
-//            public void onWindowSizeChanged(int size) {
-//                int height = AndroidUtilities.dp(36 * Math.min(3, mentionsAdapter.getItemCount()) + (mentionsAdapter.getItemCount() > 3 ? 18 : 0));
-//                if (size - ActionBar.getCurrentActionBarHeight() * 2 < height) {
-//                    allowMentions = false;
-//                    if (mentionListView != null && mentionListView.getVisibility() == View.VISIBLE) {
-//                        mentionListView.clearAnimation();
-//                        mentionListView.setVisibility(View.INVISIBLE);
-//                    }
-//                } else {
-//                    allowMentions = true;
-//                    if (mentionListView != null && mentionListView.getVisibility() == View.INVISIBLE) {
-//                        mentionListView.clearAnimation();
-//                        mentionListView.setVisibility(View.VISIBLE);
-//                    }
-//                }
-//            }
-//        });
-//        containerView.addView(captionEditText, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 0, -400));
-
-//        mentionListView = new RecyclerListView(parentActivity);
-//        mentionLayoutManager = new LinearLayoutManager(parentActivity) {
-//            @Override
-//            public boolean supportsPredictiveItemAnimations() {
-//                return false;
-//            }
-//        };
-//        mentionLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//        mentionListView.setLayoutManager(mentionLayoutManager);
-//        mentionListView.setBackgroundColor(0x7f000000);
-//        mentionListView.setVisibility(View.GONE);
-//        mentionListView.setClipToPadding(true);
-//        if (Build.VERSION.SDK_INT > 8) {
-//            mentionListView.setOverScrollMode(ListView.OVER_SCROLL_NEVER);
-//        }
-//        containerView.addView(mentionListView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 110, Gravity.LEFT | Gravity.BOTTOM));
-//
-//        mentionListView.setAdapter(mentionsAdapter = new MentionsAdapter(parentActivity, true, new MentionsAdapter.MentionsAdapterDelegate() {
-//            @Override
-//            public void needChangePanelVisibility(boolean show) {
-//                if (show) {
-//                    FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) mentionListView.getLayoutParams();
-//                    int height = 36 * Math.min(3, mentionsAdapter.getItemCount()) + (mentionsAdapter.getItemCount() > 3 ? 18 : 0);
-//                    layoutParams3.height = AndroidUtilities.dp(height);
-//                    layoutParams3.topMargin = -AndroidUtilities.dp(height);
-//                    mentionListView.setLayoutParams(layoutParams3);
-//
-//                    if (mentionListAnimation != null) {
-//                        mentionListAnimation.cancel();
-//                        mentionListAnimation = null;
-//                    }
-//
-//                    if (mentionListView.getVisibility() == View.VISIBLE) {
-//                        ViewProxy.setAlpha(mentionListView, 1.0f);
-//                        return;
-//                    } else {
-//                        mentionLayoutManager.scrollToPositionWithOffset(0, 10000);
-//                    }
-//                    if (allowMentions) {
-//                        mentionListView.setVisibility(View.VISIBLE);
-//                        mentionListAnimation = new AnimatorSet();
-//                        mentionListAnimation.playTogether(
-//                                ObjectAnimator.ofFloat(mentionListView, "alpha", 0.0f, 1.0f)
-//                        );
-//                        mentionListAnimation.addListener(new AnimatorListenerAdapter() {
-//                            @Override
-//                            public void onAnimationEnd(Object animation) {
-//                                if (mentionListAnimation != null && mentionListAnimation.equals(animation)) {
-//                                    mentionListView.clearAnimation();
-//                                    mentionListAnimation = null;
-//                                }
-//                            }
-//                        });
-//                        mentionListAnimation.setDuration(200);
-//                        mentionListAnimation.start();
-//                    } else {
-//                        ViewProxy.setAlpha(mentionListView, 1.0f);
-//                        mentionListView.clearAnimation();
-//                        mentionListView.setVisibility(View.INVISIBLE);
-//                    }
-//                } else {
-//                    if (mentionListAnimation != null) {
-//                        mentionListAnimation.cancel();
-//                        mentionListAnimation = null;
-//                    }
-//
-//                    if (mentionListView.getVisibility() == View.GONE) {
-//                        return;
-//                    }
-//                    if (allowMentions) {
-//                        mentionListAnimation = new AnimatorSet();
-//                        mentionListAnimation.playTogether(
-//                                ObjectAnimator.ofFloat(mentionListView, "alpha", 0.0f)
-//                        );
-//                        mentionListAnimation.addListener(new AnimatorListenerAdapter() {
-//                            @Override
-//                            public void onAnimationEnd(Object animation) {
-//                                if (mentionListAnimation != null && mentionListAnimation.equals(animation)) {
-//                                    mentionListView.clearAnimation();
-//                                    mentionListView.setVisibility(View.GONE);
-//                                    mentionListAnimation = null;
-//                                }
-//                            }
-//                        });
-//                        mentionListAnimation.setDuration(200);
-//                        mentionListAnimation.start();
-//                    } else {
-//                        mentionListView.clearAnimation();
-//                        mentionListView.setVisibility(View.GONE);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onContextSearch(boolean searching) {
-//
-//            }
-//
-//            @Override
-//            public void onContextClick(TLRPC.BotInlineResult result) {
-//
-//            }
-//        }));
-//
-//        mentionListView.setOnItemClickListener(new RecyclerListView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Object object = mentionsAdapter.getItem(position);
-//                int start = mentionsAdapter.getResultStartPosition();
-//                int len = mentionsAdapter.getResultLength();
-//                if (object instanceof TLRPC.User) {
-//                    TLRPC.User user = (TLRPC.User) object;
-//                    if (user != null) {
-//                        captionEditText.replaceWithText(start, len, "@" + user.username + " ");
-//                    }
-//                } else if (object instanceof String) {
-//                    captionEditText.replaceWithText(start, len, object + " ");
-//                }
-//            }
-//        });
-//
-//        mentionListView.setOnItemLongClickListener(new RecyclerListView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemClick(View view, int position) {
-//                Object object = mentionsAdapter.getItem(position);
-//                if (object instanceof String) {
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
-//                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-//                    builder.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
-//                    builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            mentionsAdapter.clearRecentHashtags();
-//                        }
-//                    });
-//                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-//                    showAlertDialog(builder);
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-    }
-
-    private void updateCaptionTextForCurrentPhoto(Object object) {
-        CharSequence caption = null;
-        if (object instanceof AndroidUtilities.PhotoEntry) {
-            caption = ((AndroidUtilities.PhotoEntry) object).caption;
-        } else if (object instanceof AndroidUtilities.SearchImage) {
-            caption = ((AndroidUtilities.SearchImage) object).caption;
-        }
-//        if (caption == null || caption.length() == 0) {
-//            captionEditText.setFieldText("");
-//        } else {
-//            captionEditText.setFieldText(caption);
-//        }
-    }
-
-    private void closeCaptionEnter(boolean apply) {
-        Object object = imagesArrLocals.get(currentIndex);
-        if (apply) {
-            if (object instanceof AndroidUtilities.PhotoEntry) {
-//                ((AndroidUtilities.PhotoEntry) object).caption = captionEditText.getFieldCharSequence();
-            } else if (object instanceof AndroidUtilities.SearchImage) {
-//                ((AndroidUtilities.SearchImage) object).caption = captionEditText.getFieldCharSequence();
-            }
-
-//            if (captionEditText.getFieldCharSequence().length() != 0 && !placeProvider.isPhotoChecked(currentIndex)) {
-//                placeProvider.setPhotoChecked(currentIndex);
-//                checkImageView.setChecked(placeProvider.isPhotoChecked(currentIndex), true);
-//                updateSelectedCount();
-//            }
-        }
-//        c/ropItem.setVisibility(View.VISIBLE);
-//        captionItem.setVisibility(View.VISIBLE);
-//        if (Build.VERSION.SDK_INT >= 16) {
-//            tuneItem.setVisibility(View.VISIBLE);
-//        }
-//        if (sendPhotoType == 0) {
-//            checkImageView.setVisibility(View.VISIBLE);
-//        }
-//        captionDoneItem.setVisibility(View.GONE);
-//        pickerView.setVisibility(View.VISIBLE);
-
-//        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) captionEditText.getLayoutParams();
-//        layoutParams.bottomMargin = -AndroidUtilities.dp(400);
-//        captionEditText.setLayoutParams(layoutParams);
-
-//        layoutParams = (FrameLayout.LayoutParams) mentionListView.getLayoutParams();
-//        layoutParams.bottomMargin = -AndroidUtilities.dp(400);
-//        mentionListView.setLayoutParams(layoutParams);
-//
-        if (lastTitle != null) {
-            actionBar.setTitle(lastTitle);
-            lastTitle = null;
-        }
-
-        updateCaptionTextForCurrentPhoto(object);
-//        setCurrentCaption(captionEditText.getFieldCharSequence());
-//        if (captionEditText.isPopupShowing()) {
-//            captionEditText.hidePopup();
-//        } else {
-//            captionEditText.closeKeyboard();
-//        }
-    }
-
-    private void showAlertDialog(AlertDialog.Builder builder) {
-        if (parentActivity == null) {
-            return;
-        }
-        try {
-            if (visibleDialog != null) {
-                visibleDialog.dismiss();
-                visibleDialog = null;
-            }
-        } catch (Exception e) {
-            FileLog.e("tmessages", e);
-        }
-        try {
-            visibleDialog = builder.show();
-            visibleDialog.setCanceledOnTouchOutside(true);
-            visibleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    visibleDialog = null;
-                }
-            });
-        } catch (Exception e) {
-            FileLog.e("tmessages", e);
-        }
-    }
-
-    private void applyCurrentEditMode() {
-        Bitmap bitmap = null;
-        if (currentEditMode == 1) {
-            bitmap = photoCropView.getBitmap();
-//        } else if (currentEditMode == 2) {
-//            bitmap = photoFilterView.getBitmap();
-        }
-        if (bitmap != null) {
-            TLRPC.PhotoSize size = ImageLoader.scaleAndSaveImage(bitmap, AndroidUtilities.getPhotoSize(), AndroidUtilities.getPhotoSize(), 80, false, 101, 101);
-            if (size != null) {
-                Object object = imagesArrLocals.get(currentIndex);
-                if (object instanceof AndroidUtilities.PhotoEntry) {
-                    AndroidUtilities.PhotoEntry entry = (AndroidUtilities.PhotoEntry) object;
-                    entry.imagePath = FileLoader.getPathToAttach(size, true).toString();
-                    size = ImageLoader.scaleAndSaveImage(bitmap, AndroidUtilities.dp(120), AndroidUtilities.dp(120), 70, false, 101, 101);
-                    if (size != null) {
-                        entry.thumbPath = FileLoader.getPathToAttach(size, true).toString();
-                    }
-                } else if (object instanceof AndroidUtilities.SearchImage) {
-                    AndroidUtilities.SearchImage entry = (AndroidUtilities.SearchImage) object;
-                    entry.imagePath = FileLoader.getPathToAttach(size, true).toString();
-                    size = ImageLoader.scaleAndSaveImage(bitmap, AndroidUtilities.dp(120), AndroidUtilities.dp(120), 70, false, 101, 101);
-                    if (size != null) {
-                        entry.thumbPath = FileLoader.getPathToAttach(size, true).toString();
-                    }
-                }
-                if (sendPhotoType == 0 && placeProvider != null) {
-                    placeProvider.updatePhotoAtIndex(currentIndex);
-                    if (!placeProvider.isPhotoChecked(currentIndex)) {
-                        placeProvider.setPhotoChecked(currentIndex);
-                        checkImageView.setChecked(placeProvider.isPhotoChecked(currentIndex), true);
-                        updateSelectedCount();
-                    }
-                }
-                if (currentEditMode == 1) {
-                    float scaleX = photoCropView.getRectSizeX() / (float) getContainerViewWidth();
-                    float scaleY = photoCropView.getRectSizeY() / (float) getContainerViewHeight();
-                    scale = scaleX > scaleY ? scaleX : scaleY;
-                    translationX = photoCropView.getRectX() + photoCropView.getRectSizeX() / 2 - getContainerViewWidth() / 2;
-                    translationY = photoCropView.getRectY() + photoCropView.getRectSizeY() / 2 - getContainerViewHeight() / 2;
-                    zoomAnimation = true;
-                }
-                centerImage.setParentView(null);
-                centerImage.setOrientation(0, true);
-                centerImage.setImageBitmap(bitmap);
-                centerImage.setParentView(containerView);
-            }
-        }
     }
 
     private void switchToEditMode(final int mode) {
@@ -1537,12 +875,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             return;
         }
         if (mode == 0) {
-//            if (currentEditMode == 2) {
-//                if (photoFilterView.getToolsView().getVisibility() != View.VISIBLE) {
-//                    photoFilterView.switchToOrFromEditMode();
-//                    return;
-//                }
-//            }
             Bitmap bitmap = centerImage.getBitmap();
             if (bitmap != null) {
                 int bitmapWidth = centerImage.getBitmapWidth();
@@ -1569,16 +901,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             imageMoveAnimation = new AnimatorSet();
             if (currentEditMode == 1) {
                 imageMoveAnimation.playTogether(
-//                        ObjectAnimator.ofFloat(editorDoneLayout, "translationY", AndroidUtilities.dp(48)),
                         ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", 0, 1),
                         ObjectAnimator.ofFloat(photoCropView, "alpha", 0)
                 );
             } else if (currentEditMode == 2) {
-//                photoFilterView.shutdown();
-//                imageMoveAnimation.playTogether(
-//                        ObjectAnimator.ofFloat(photoFilterView.getToolsView(), "translationY", AndroidUtilities.dp(126)),
-//                        ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", 0, 1)
-//                );
             }
             imageMoveAnimation.setDuration(200);
             imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
@@ -1586,11 +912,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 public void onAnimationEnd(Animator animation) {
                     if (currentEditMode == 1) {
                         photoCropView.clearAnimation();
-//                        editorDoneLayout.clearAnimation();
-//                        editorDoneLayout.setVisibility(View.GONE);
                         photoCropView.setVisibility(View.GONE);
                     } else if (currentEditMode == 2) {
-//                        photoFilterView.getToolsView().clearAnimation();
                         containerView.removeView(photoFilterView);
                         photoFilterView = null;
                     }
@@ -1605,7 +928,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
                     AnimatorSet animatorSet = new AnimatorSet();
                     ArrayList<Animator> arrayList = new ArrayList<>();
-//                    arrayList.add(ObjectAnimator.ofFloat(pickerView, "translationY", 0));
                     arrayList.add(ObjectAnimator.ofFloat(actionBar, "translationY", 0));
                     if (needCaptionLayout) {
                         arrayList.add(ObjectAnimator.ofFloat(captionTextView, "translationY", 0));
@@ -1618,8 +940,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     animatorSet.addListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationStart(Animator animation) {
-//                            pickerView.setVisibility(View.VISIBLE);
-//                            actionBar.setVisibility(View.VISIBLE);
                             if (needCaptionLayout) {
                                 captionTextView.setVisibility(captionTextView.getTag() != null ? View.VISIBLE : View.INVISIBLE);
                             }
@@ -1630,8 +950,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-//                            pickerView.clearAnimation();
-//                            actionBar.clearAnimation();
                             if (needCaptionLayout) {
                                 captionTextView.clearAnimation();
                             }
@@ -1664,10 +982,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 });
             }
 
-//            editorDoneLayout.doneButtonTextView.setText(LocaleController.getString("Crop", R.string.Crop));
             changeModeAnimation = new AnimatorSet();
             ArrayList<Animator> arrayList = new ArrayList<>();
-//            arrayList.add(ObjectAnimator.ofFloat(pickerView, "translationY", 0, AndroidUtilities.dp(96)));
             arrayList.add(ObjectAnimator.ofFloat(actionBar, "translationY", 0, -actionBar.getHeight()));
             if (needCaptionLayout) {
                 arrayList.add(ObjectAnimator.ofFloat(captionTextView, "translationY", 0, AndroidUtilities.dp(96)));
@@ -1681,10 +997,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     changeModeAnimation = null;
-//                    pickerView.clearAnimation();
-//                    actionBar.clearAnimation();
-//                    pickerView.setVisibility(View.GONE);
-//                    actionBar.setVisibility(View.GONE);
                     if (needCaptionLayout) {
                         captionTextView.clearAnimation();
                         captionTextView.setVisibility(View.INVISIBLE);
@@ -1716,7 +1028,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
                     imageMoveAnimation = new AnimatorSet();
                     imageMoveAnimation.playTogether(
-//                            ObjectAnimator.ofFloat(editorDoneLayout, "translationY", AndroidUtilities.dp(48), 0),
                             ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", 0, 1),
                             ObjectAnimator.ofFloat(photoCropView, "alpha", 0, 1)
                     );
@@ -1724,7 +1035,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationStart(Animator animation) {
-//                            editorDoneLayout.setVisibility(View.VISIBLE);
                             photoCropView.setVisibility(View.VISIBLE);
                         }
 
@@ -1738,7 +1048,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                             scale = 1;
                             updateMinMax(scale);
                             containerView.invalidate();
-//                            editorDoneLayout.clearAnimation();
                             photoCropView.clearAnimation();
                         }
                     });
@@ -1750,24 +1059,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
     }
 
-    private void toggleCheckImageView(boolean show) {
-        AnimatorSet animatorSet = new AnimatorSet();
-        ArrayList<Animator> arrayList = new ArrayList<>();
-//        arrayList.add(ObjectAnimator.ofFloat(pickerView, "alpha", show ? 1.0f : 0.0f));
-        if (needCaptionLayout) {
-            arrayList.add(ObjectAnimator.ofFloat(captionTextView, "alpha", show ? 1.0f : 0.0f));
-        }
-        if (sendPhotoType == 0) {
-            arrayList.add(ObjectAnimator.ofFloat(checkImageView, "alpha", show ? 1.0f : 0.0f));
-        }
-        animatorSet.playTogether(arrayList);
-        animatorSet.setDuration(200);
-        animatorSet.start();
-    }
-
     private void toggleActionBar(boolean show, final boolean animated) {
         if (show) {
-//            actionBar.setVisibility(View.VISIBLE);
             if (canShowBottom) {
                 bottomLayout.setVisibility(View.VISIBLE);
                 if (captionTextView.getTag() != null) {
@@ -1776,9 +1069,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
         }
         isActionBarVisible = show;
-//        actionBar.setEnabled(show);
         bottomLayout.setEnabled(show);
-//
         if (animated) {
             ArrayList<Animator> arrayList = new ArrayList<>();
             arrayList.add(ObjectAnimator.ofFloat(actionBar, "alpha", show ? 1.0f : 0.0f));
@@ -1811,13 +1102,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             currentActionBarAnimation.setDuration(200);
             currentActionBarAnimation.start();
         } else {
-//            ViewProxy.setAlpha(actionBar, show ? 1.0f : 0.0f);
             ViewProxy.setAlpha(bottomLayout, show ? 1.0f : 0.0f);
             if (captionTextView.getTag() != null) {
                 ViewProxy.setAlpha(captionTextView, show ? 1.0f : 0.0f);
             }
             if (!show) {
-//                actionBar.setVisibility(View.GONE);
                 if (canShowBottom) {
                     bottomLayout.clearAnimation();
                     bottomLayout.setVisibility(View.GONE);
@@ -1857,74 +1146,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         return null;
     }
 
-    private TLRPC.FileLocation getFileLocation(int index, int size[]) {
-        if (index < 0) {
-            return null;
-        }
-        if (!imagesArrLocations.isEmpty()) {
-            if (index >= imagesArrLocations.size()) {
-                return null;
-            }
-            size[0] = imagesArrLocationsSizes.get(index);
-            return imagesArrLocations.get(index);
-        } else if (!imagesArr.isEmpty()) {
-            if (index >= imagesArr.size()) {
-                return null;
-            }
-        }
-        return null;
-    }
-
-//    private TLRPC.InputFileLocation getInputFileLocation(int index) {
-//        if (index < 0) {
-//            return null;
-//        }
-//        if (!imagesArrLocations.isEmpty()) {
-//            if (index >= imagesArrLocations.size()) {
-//                return null;
-//            }
-//            TLRPC.FileLocation sizeFull = imagesArrLocations.get(index);
-//            TLRPC.TL_inputFileLocation location = new TLRPC.TL_inputFileLocation();
-//            location.local_id = sizeFull.local_id;
-//            location.volume_id = sizeFull.volume_id;
-//            location.id = sizeFull.dc_id;
-//            location.secret = sizeFull.secret;
-//            return location;
-//        } else if (!imagesArr.isEmpty()) {
-//            if (index >= imagesArr.size()) {
-//                return null;
-//            }
-//            Object message = imagesArr.get(index);
-//            if (message.messageOwner instanceof TLRPC.TL_messageService) {
-//                if (message.messageOwner.action instanceof TLRPC.TL_messageActionUserUpdatedPhoto) {
-//                    TLRPC.FileLocation sizeFull = message.messageOwner.action.newUserPhoto.photo_big;
-//                    TLRPC.TL_inputFileLocation location = new TLRPC.TL_inputFileLocation();
-//                    location.local_id = sizeFull.local_id;
-//                    location.volume_id = sizeFull.volume_id;
-//                    location.id = sizeFull.dc_id;
-//                    location.secret = sizeFull.secret;
-//                    return location;
-//                } else {
-//                    TLRPC.PhotoSize sizeFull = FileLoader.getClosestPhotoSizeWithSize(message.photoThumbs, AndroidUtilities.getPhotoSize());
-//                    if (sizeFull != null) {
-//                        TLRPC.TL_inputFileLocation location = new TLRPC.TL_inputFileLocation();
-//                        location.local_id = sizeFull.location.local_id;
-//                        location.volume_id = sizeFull.location.volume_id;
-//                        location.id = sizeFull.location.dc_id;
-//                        location.secret = sizeFull.location.secret;
-//                        return location;
-//                    }
-//                }
-//            }
-//        }
-//        return null;
-//    }
-
     private void updateSelectedCount() {
         if (placeProvider == null) {
             return;
         }
-//        pickerView.updateSelectedCount(placeProvider.getSelectedCount(), false);
     }
 
     private void onPhotoShow(final Object messageObject,
@@ -1966,27 +1191,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         currentUserAvatarLocation = null;
         containerView.setPadding(0, 0, 0, 0);
         currentThumb = object != null ? object.thumb : null;
-//        menuItem.setVisibility(View.VISIBLE);
         bottomLayout.setVisibility(View.VISIBLE);
         shareButton.setVisibility(View.GONE);
-//        menuItem.hideSubItem(gallery_menu_showall);
-//        ViewProxy.setTranslationY(actionBar, 0);
-//        ViewProxy.setTranslationY(pickerView, 0);
         ViewProxy.setAlpha(checkImageView, 1.0f);
-//        ViewProxy.setAlpha(pickerView, 1.0f);
         checkImageView.clearAnimation();
-//        pickerView.clearAnimation();
-//        editorDoneLayout.clearAnimation();
         checkImageView.setVisibility(View.GONE);
-//        pickerView.setVisibility(View.GONE);
-//        cropItem.setVisibility(View.GONE);
-//        tuneItem.setVisibility(View.GONE);
-//        captionItem.setVisibility(View.GONE);
-//        captionDoneItem.setVisibility(View.GONE);
-//        captionEditText.clearAnimation();
-//        captionEditText.setVisibility(View.GONE);
-//        mentionListView.setVisibility(View.GONE);
-//        editorDoneLayout.setVisibility(View.GONE);
         captionTextView.setTag(null);
         captionTextView.clearAnimation();
         captionTextView.setVisibility(View.INVISIBLE);
@@ -2005,55 +1214,17 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
         }
 
-        if (messageObject != null && messages == null) {
-            imagesArr.add(messageObject);
-//            if (!(messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage) && (messageObject.messageOwner.action == null || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionEmpty)) {
-//                needSearchImageInArr = true;
-//                imagesByIds[0].put(messageObject.getId(), messageObject);
-//                menuItem.showSubItem(gallery_menu_showall);
-//            } else {
-//                menuItem.hideSubItem(gallery_menu_showall);
-//            }
-            setImageIndex(0, true);
-        }
         if (photos != null) {
             if (sendPhotoType == 0) {
                 checkImageView.setVisibility(View.VISIBLE);
             }
-//            menuItem.setVisibility(View.GONE);
             imagesArrLocals.addAll(photos);
             setImageIndex(index, true);
-//            pickerView.setVisibility(View.VISIBLE);
             bottomLayout.clearAnimation();
             bottomLayout.setVisibility(View.GONE);
             canShowBottom = false;
-            Object obj = imagesArrLocals.get(index);
-//            cropItem.setVisibility(obj instanceof MediaController.PhotoEntry || obj instanceof MediaController.SearchImage && ((MediaController.SearchImage) obj).type == 0 ? View.VISIBLE : View.GONE);
-//            if (parentChatActivity != null && parentChatActivity.currentEncryptedChat == null) {
-//                mentionsAdapter.setChatInfo(parentChatActivity.info);
-//                mentionsAdapter.setNeedUsernames(parentChatActivity.currentChat != null);
-//                mentionsAdapter.setNeedBotContext(false);
-//                captionItem.setVisibility(cropItem.getVisibility());
-//                captionEditText.setVisibility(cropItem.getVisibility());
-//                needCaptionLayout = captionItem.getVisibility() == View.VISIBLE;
-//                if (needCaptionLayout) {
-//                    captionEditText.onCreate();
-//                }
-//            }
-//            if (Build.VERSION.SDK_INT >= 16) {
-//                tuneItem.setVisibility(cropItem.getVisibility());
-//            }
             updateSelectedCount();
         }
-
-//        if (currentDialogId != 0 && totalImagesCount == 0) {
-//            SharedMediaQuery.getMediaCount(currentDialogId, SharedMediaQuery.MEDIA_PHOTOVIDEO, classGuid, true);
-//            if (mergeDialogId != 0) {
-//                SharedMediaQuery.getMediaCount(mergeDialogId, SharedMediaQuery.MEDIA_PHOTOVIDEO, classGuid, true);
-//            }
-//        } else if (avatarsUserId != 0) {
-//            MessagesController.getInstance().loadUserPhotos(avatarsUserId, 0, 80, 0, true, classGuid);
-//        }
     }
 
     private void setImages() {
@@ -2086,130 +1257,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 return;
             }
             currentObject = imagesArr.get(currentIndex);
-//            if (currentObject.canDeleteMessage(null)) {
-//                menuItem.showSubItem(gallery_menu_delete);
-//            } else {
-//                menuItem.hideSubItem(gallery_menu_delete);
-//            }
-//            if (currentObject.messageOwner.from_id > 0) {
-//                TLRPC.User user = MessagesController.getInstance().getUser(currentObject.messageOwner.from_id);
-//                if (user != null) {
-//                    nameTextView.setText(UserObject.getUserName(user));
-//                } else {
-//                    nameTextView.setText("");
-//                }
-//            } else {
-//                TLRPC.Chat chat = MessagesController.getInstance().getChat(-currentObject.messageOwner.from_id);
-//                if (chat != null) {
-//                    nameTextView.setText(chat.title);
-//                } else {
-//                    nameTextView.setText("");
-//                }
-//            }
-//            long date = (long) currentObject.messageOwner.date * 1000;
-//            String dateString = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)));
-//            if (currentFileNames[0] != null && currentFileNames[0].endsWith("mp4")) {
-//                dateTextView.setText(String.format("%s (%s)", dateString, AndroidUtilities.formatFileSize(currentObject.messageOwner.media.video.size)));
-//            } else {
-//                dateTextView.setText(dateString);
-//            }
-//            CharSequence caption = currentObject.caption;
-//            setCurrentCaption(caption);
-
-//            if (totalImagesCount + totalImagesCountMerge != 0 && !needSearchImageInArr) {
-//                if (opennedFromMedia) {
-//                    if (imagesArr.size() < totalImagesCount + totalImagesCountMerge && !loadingMoreImages && currentIndex > imagesArr.size() - 5) {
-//                        int loadFromMaxId = imagesArr.isEmpty() ? 0 : imagesArr.get(imagesArr.size() - 1).getId();
-//                        int loadIndex = 0;
-//                        if (endReached[loadIndex] && mergeDialogId != 0) {
-//                            loadIndex = 1;
-//                            if (!imagesArr.isEmpty() && imagesArr.get(imagesArr.size() - 1).getDialogId() != mergeDialogId) {
-//                                loadFromMaxId = 0;
-//                            }
-//                        }
-//
-//                        SharedMediaQuery.loadMedia(loadIndex == 0 ? currentDialogId : mergeDialogId, 0, 80, loadFromMaxId, SharedMediaQuery.MEDIA_PHOTOVIDEO, true, classGuid);
-//                        loadingMoreImages = true;
-//                    }
-//                    actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, currentIndex + 1, totalImagesCount + totalImagesCountMerge));
-//                } else {
-//                    if (imagesArr.size() < totalImagesCount + totalImagesCountMerge && !loadingMoreImages && currentIndex < 5) {
-//                        int loadFromMaxId = imagesArr.isEmpty() ? 0 : imagesArr.get(0).getId();
-//                        int loadIndex = 0;
-//                        if (endReached[loadIndex] && mergeDialogId != 0) {
-//                            loadIndex = 1;
-//                            if (!imagesArr.isEmpty() && imagesArr.get(0).getDialogId() != mergeDialogId) {
-//                                loadFromMaxId = 0;
-//                            }
-//                        }
-//
-//                        SharedMediaQuery.loadMedia(loadIndex == 0 ? currentDialogId : mergeDialogId, 0, 80, loadFromMaxId, SharedMediaQuery.MEDIA_PHOTOVIDEO, true, classGuid);
-//                        loadingMoreImages = true;
-//                    }
-//                    actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, (totalImagesCount + totalImagesCountMerge - imagesArr.size()) + currentIndex + 1, totalImagesCount + totalImagesCountMerge));
-//                }
-//            } else if (currentObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage) {
-//                actionBar.setTitle(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
-//            }
-//            if (currentObject.messageOwner.ttl != 0) {
-//                menuItem.hideSubItem(gallery_menu_save);
-//                shareButton.setVisibility(View.GONE);
-//            } else {
-//                menuItem.showSubItem(gallery_menu_save);
-//                shareButton.setVisibility(View.VISIBLE);
-//            }
-//        } else if (!imagesArrLocations.isEmpty()) {
-//            nameTextView.setText("");
-//            dateTextView.setText("");
-//            if (avatarsUserId == UserConfig.getClientUserId() && !avatarsArr.isEmpty()) {
-//                menuItem.showSubItem(gallery_menu_delete);
-//            } else {
-//                menuItem.hideSubItem(gallery_menu_delete);
-//            }
-//            TLRPC.FileLocation old = currentFileLocation;
-//            if (index < 0 || index >= imagesArrLocations.size()) {
-//                closePhoto(false, false);
-//                return;
-//            }
-//            currentFileLocation = imagesArrLocations.get(index);
-//            if (old != null && currentFileLocation != null && old.local_id == currentFileLocation.local_id && old.volume_id == currentFileLocation.volume_id) {
-//                sameImage = true;
-//            }
-//            actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, currentIndex + 1, imagesArrLocations.size()));
-//            menuItem.showSubItem(gallery_menu_save);
-//            shareButton.setVisibility(View.VISIBLE);
-//        } else if (!imagesArrLocals.isEmpty()) {
-//            Object object = imagesArrLocals.get(index);
-//            if (index < 0 || index >= imagesArrLocals.size()) {
-//                closePhoto(false, false);
-//                return;
-//            }
-//            boolean fromCamera = false;
-//            CharSequence caption = null;
-//            if (object instanceof MediaController.PhotoEntry) {
-//                currentPathObject = ((MediaController.PhotoEntry) object).path;
-//                fromCamera = ((MediaController.PhotoEntry) object).bucketId == 0 && ((MediaController.PhotoEntry) object).dateTaken == 0 && imagesArrLocals.size() == 1;
-//                caption = ((MediaController.PhotoEntry) object).caption;
-//            } else if (object instanceof MediaController.SearchImage) {
-//                MediaController.SearchImage searchImage = (MediaController.SearchImage) object;
-//                if (searchImage.document != null) {
-//                    currentPathObject = FileLoader.getPathToAttach(searchImage.document, true).getAbsolutePath();
-//                } else {
-//                    currentPathObject = searchImage.imageUrl;
-//                }
-//                caption = searchImage.caption;
-//            }
-//            if (fromCamera) {
-//                actionBar.setTitle(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
-//            } else {
-//                actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, currentIndex + 1, imagesArrLocals.size()));
-//            }
-//            if (sendPhotoType == 0) {
-//                checkImageView.setChecked(placeProvider.isPhotoChecked(currentIndex), false);
-//            }
-//
-//            setCurrentCaption(caption);
-//            updateCaptionTextForCurrentPhoto(object);
         }
 
 
@@ -2298,33 +1345,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
     }
 
-    private void setCurrentCaption(final CharSequence caption) {
-        if (caption != null && caption.length() > 0) {
-            captionTextView = captionTextViewOld;
-            captionTextViewOld = captionTextViewNew;
-            captionTextViewNew = captionTextView;
-
-//            captionItem.setIcon(R.drawable.photo_text2);
-            captionTextView.setTag(caption);
-            captionTextView.setText(caption);
-            ViewProxy.setAlpha(captionTextView, 1.0f );
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                @Override
-                public void run() {
-                    captionTextViewOld.setTag(null);
-                    captionTextViewOld.clearAnimation();
-                    captionTextViewOld.setVisibility(View.INVISIBLE);
-                    captionTextViewNew.setVisibility(View.VISIBLE);
-                }
-            });
-        } else {
-//            captionItem.setIcon(R.drawable.photo_text);
-            captionTextView.setTag(null);
-            captionTextView.clearAnimation();
-            captionTextView.setVisibility(View.INVISIBLE);
-        }
-    }
-
     private void checkProgress(int a, boolean animated) {
         if (currentFileNames[a] != null) {
             int index = currentIndex;
@@ -2334,40 +1354,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 index -= 1;
             }
             File f = null;
-//            if (currentObject != null) {
-//                Object messageObject = imagesArr.get(index);
-//                f = FileLoader.getPathToMessage(messageObject.messageOwner);
-//            } else if (currentFileLocation != null) {
-//                TLRPC.FileLocation location = imagesArrLocations.get(index);
-//                f = FileLoader.getPathToAttach(location, avatarsUserId != 0);
-//            } else if (currentPathObject != null) {
-//                f = new File(FileLoader.getInstance().getDirectory(FileLoader.MEDIA_DIR_DOCUMENT), currentFileNames[a]);
-//                if (!f.exists()) {
-//                    f = new File(FileLoader.getInstance().getDirectory(FileLoader.MEDIA_DIR_CACHE), currentFileNames[a]);
-//                }
-//            }
-//            if (f != null && f.exists()) {
-//                if (currentPathObject == null && currentFileNames[a].endsWith("mp4")) {
-//                    radialProgressViews[a].setBackgroundState(3, animated);
-//                } else {
-//                    radialProgressViews[a].setBackgroundState(-1, animated);
-//                }
-//            } else {
-//                if (currentPathObject == null && currentFileNames[a].endsWith("mp4")) {
-//                    if (!FileLoader.getInstance().isLoadingFile(currentFileNames[a])) {
-//                        radialProgressViews[a].setBackgroundState(2, false);
-//                    } else {
-//                        radialProgressViews[a].setBackgroundState(1, false);
-//                    }
-//                } else {
-//                    radialProgressViews[a].setBackgroundState(0, animated);
-//                }
-//                Float progress = ImageLoader.getInstance().getFileProgress(currentFileNames[a]);
-//                if (progress == null) {
-//                    progress = 0.0f;
-//                }
-//                radialProgressViews[a].setProgress(progress, false);
-//            }
             if (a == 0) {
                 canZoom = !imagesArrLocals.isEmpty() || (currentFileNames[0] != null && !currentFileNames[0].endsWith("mp4") && radialProgressViews[0].backgroundState != 0);
             }
@@ -2427,35 +1413,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
     }
 
-    public boolean isShowingImage(Object object) {
-        return isVisible && !disableShowCheck && object != null && currentObject != null;// && currentObject.getId() == object.getId();
-    }
-
-    public boolean isShowingImage(TLRPC.FileLocation object) {
-        return isVisible && !disableShowCheck && object != null && currentFileLocation != null && object.local_id == currentFileLocation.local_id && object.volume_id == currentFileLocation.volume_id && object.dc_id == currentFileLocation.dc_id;
-    }
-
-    public boolean isShowingImage(String object) {
-        return isVisible && !disableShowCheck && object != null && currentPathObject != null && object.equals(currentPathObject);
-    }
-
-    public void openPhoto(final Object messageObject, long dialogId, long mergeDialogId, final PhotoViewerProvider provider) {
-        openPhoto(messageObject, null, null, null, 0, provider, null, dialogId, mergeDialogId);
-    }
-
-    public void openPhoto(final TLRPC.FileLocation fileLocation, final PhotoViewerProvider provider) {
-        openPhoto(null, fileLocation, null, null, 0, provider, null, 0, 0);
-    }
-
-    public void openPhoto(final ArrayList<Object> messages, final int index, long dialogId, long mergeDialogId, final PhotoViewerProvider provider) {
-        openPhoto(messages.get(index), null, messages, null, index, provider, null, dialogId, mergeDialogId);
-    }
-
     public void openPhotoForSelect(final ArrayList<Object> photos, final int index, int type, final PhotoViewerProvider provider, Activity chatActivity) {
         sendPhotoType = type;
-//        if (pickerView != null) {
-//            pickerView.doneButtonTextView.setText(sendPhotoType == 1 ? "Set" : "Send".toUpperCase());
-//        }
         openPhoto(null, null, null, photos, index, provider, chatActivity, 0, 0);
     }
 
@@ -2487,14 +1446,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             try {
                 wm.removeView(windowView);
             } catch (Exception e) {
-                //don't promt
             }
         }
 
         try {
             windowLayoutParams.type = WindowManager.LayoutParams.LAST_APPLICATION_WINDOW;
-
-
             windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
             windowLayoutParams.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED;
             windowView.setFocusable(false);
@@ -2506,8 +1462,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
 
         parentChatActivity = chatActivity;
-
-//        actionBar.setTitle("Of");
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidFailedLoad);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidLoaded);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileLoadProgressChanged);
@@ -2908,25 +1862,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
             animatorSet.start();
         }
-    }
-
-    public void destroyPhotoViewer() {
-        if (parentActivity == null || windowView == null) {
-            return;
-        }
-        try {
-            if (windowView.getParent() != null) {
-                WindowManager wm = (WindowManager) parentActivity.getSystemService(Context.WINDOW_SERVICE);
-                wm.removeViewImmediate(windowView);
-            }
-            windowView = null;
-        } catch (Exception e) {
-            FileLog.e("tmessages", e);
-        }
-//        if (captionEditText != null) {
-//            captionEditText.onDestroy();
-//        }
-        Instance = null;
     }
 
     private void onPhotoClosed(PlaceProviderObject object) {
@@ -3338,15 +2273,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         imageMoveAnimation.start();
     }
 
-    public void setAnimationValue(float value) {
-        animationValue = value;
-        containerView.invalidate();
-    }
-
-    public float getAnimationValue() {
-        return animationValue;
-    }
-
     private void onDraw(Canvas canvas) {
         if (animationInProgress == 1 || !isVisible && animationInProgress != 2) {
             return;
@@ -3570,33 +2496,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (currentObject == null || currentFileNames[0] == null) {
             return;
         }
-        boolean loadFile = false;
-//        if (currentObject.messageOwner.attachPath != null && currentObject.messageOwner.attachPath.length() != 0) {
-//            File f = new File(currentObject.messageOwner.attachPath);
-//            if (f.exists()) {
-//                Intent intent = new Intent(Intent.ACTION_VIEW);
-//                intent.setDataAndType(Uri.fromFile(f), "video/mp4");
-//                parentActivity.startActivityForResult(intent, 500);
-//            } else {
-//                loadFile = true;
-//            }
-//        } else {
-//            File cacheFile = FileLoader.getPathToMessage(currentObject.messageOwner);
-//            if (cacheFile.exists()) {
-//                Intent intent = new Intent(Intent.ACTION_VIEW);
-//                intent.setDataAndType(Uri.fromFile(cacheFile), "video/mp4");
-//                parentActivity.startActivityForResult(intent, 500);
-//            } else {
-//                loadFile = true;
-//            }
-//        }
-//        if (loadFile) {
-//            if (!FileLoader.getInstance().isLoadingFile(currentFileNames[0])) {
-//                FileLoader.getInstance().loadFile(currentObject.messageOwner.media.video, true);
-//            } else {
-//                FileLoader.getInstance().cancelLoadFile(currentObject.messageOwner.media.video);
-//            }
-//        }
     }
 
     @Override
@@ -3606,7 +2505,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
     @Override
     public void onShowPress(MotionEvent e) {
-
     }
 
     @Override
@@ -3693,5 +2591,19 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     @Override
     public boolean onDoubleTapEvent(MotionEvent e) {
         return false;
+    }
+
+    MessageObject currentMessageObject;
+
+    public boolean isShowingImage(MessageObject object) {
+        return isVisible && !disableShowCheck && object != null && currentMessageObject != null && currentMessageObject.getId() == object.getId();
+    }
+
+    public boolean isShowingImage(TLRPC.FileLocation object) {
+        return isVisible && !disableShowCheck && object != null && currentFileLocation != null && object.local_id == currentFileLocation.local_id && object.volume_id == currentFileLocation.volume_id && object.dc_id == currentFileLocation.dc_id;
+    }
+
+    public boolean isShowingImage(String object) {
+        return isVisible && !disableShowCheck && object != null && currentPathObject != null && object.equals(currentPathObject);
     }
 }
