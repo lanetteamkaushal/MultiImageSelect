@@ -2,6 +2,8 @@ package com.example.lcom75.multiimageselect;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,18 +18,31 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.example.lcom75.multiimageselect.customviews.BackupImageView;
 import com.example.lcom75.multiimageselect.customviews.FileLoader;
 import com.example.lcom75.multiimageselect.customviews.PhotoPickerPhotoCell;
+import com.example.lcom75.multiimageselect.customviews.PhotoViewer;
+import com.example.lcom75.multiimageselect.customviews.ViewProxy;
+import com.example.lcom75.multiimageselect.tgnet.TLRPC;
 import com.example.lcom75.multiimageselect.volley.RequestQueue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PhotoPickerActivity extends AppCompatActivity {
+public class PhotoPickerActivity extends AppCompatActivity implements View.OnClickListener,PhotoViewer.PhotoViewerProvider {
+
+    @Override
+    public void onClick(View v) {
+        if (v == ivBack) {
+            onBackPressed();
+        } else if (v == tvDone) {
+            onBackPressed();
+        }
+    }
 
     public interface PhotoPickerActivityDelegate {
         void selectedPhotosChanged();
@@ -41,7 +56,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
     private int type;
     private HashMap<String, AndroidUtilities.SearchImage> selectedWebPhotos;
-    private HashMap<Integer, AndroidUtilities.PhotoEntry> selectedPhotos;
+    private HashMap<Integer, AndroidUtilities.PhotoEntry> selectedPhotos = new HashMap<>();
     private ArrayList<AndroidUtilities.SearchImage> recentImages;
 
     private ArrayList<AndroidUtilities.SearchImage> searchResult = new ArrayList<>();
@@ -71,6 +86,9 @@ public class PhotoPickerActivity extends AppCompatActivity {
 //    private ChatActivity chatActivity;
 
     private PhotoPickerActivityDelegate delegate;
+    TextView pickerBottomLayout;
+    ImageView ivBack;
+    TextView tvAlbumTitle, tvDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +105,15 @@ public class PhotoPickerActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        pickerBottomLayout = (TextView) findViewById(R.id.pickerBottomLayout);
         this.selectedAlbum = ApplicationLoader.albumEntry;
         this.selectedPhotos = ApplicationLoader.selectedPhotos;
+        ivBack = (ImageView) findViewById(R.id.ivBack);
+        ivBack.setOnClickListener(this);
+        tvAlbumTitle = (TextView) findViewById(R.id.tvAlbumTitle);
+        tvAlbumTitle.setText(selectedAlbum.bucketName);
+        tvDone = (TextView) findViewById(R.id.tvDone);
+        tvDone.setOnClickListener(this);
         listView = (GridView) findViewById(R.id.gridView);
         listView.setPadding(AndroidUtilities.dp(4), AndroidUtilities.dp(4), AndroidUtilities.dp(4), AndroidUtilities.dp(4));
         listView.setClipToPadding(false);
@@ -126,15 +151,17 @@ public class PhotoPickerActivity extends AppCompatActivity {
 //                    if (searchItem != null) {
 //                        AndroidUtilities.hideKeyboard(searchItem.getSearchField());
 //                    }
-//                    PhotoViewer.getInstance().setParentActivity(getParentActivity());
-//                    PhotoViewer.getInstance().openPhotoForSelect(arrayList, i, singlePhoto ? 1 : 0, PhotoPickerActivity.this, chatActivity);
+                    PhotoViewer.getInstance().setParentActivity(PhotoPickerActivity.this);
+                    PhotoViewer.getInstance().openPhotoForSelect(arrayList, i, singlePhoto ? 1 : 0, PhotoPickerActivity.this, PhotoPickerActivity.this);
                 }
             }
         });
         delegate = new PhotoPickerActivityDelegate() {
             @Override
             public void selectedPhotosChanged() {
-
+                if (pickerBottomLayout != null) {
+                    pickerBottomLayout.setText(getResources().getQuantityString(R.plurals.selected_images, selectedPhotos.size(), selectedPhotos.size()));
+                }
             }
 
             @Override
@@ -149,6 +176,9 @@ public class PhotoPickerActivity extends AppCompatActivity {
         };
 
         listView.setAdapter(listAdapter = new ListAdapter(this));
+        if (pickerBottomLayout != null) {
+            pickerBottomLayout.setText(getResources().getQuantityString(R.plurals.selected_images, selectedPhotos.size(), selectedPhotos.size()));
+        }
     }
 
     public void setDelegate(PhotoPickerActivityDelegate delegate) {
@@ -374,6 +404,180 @@ public class PhotoPickerActivity extends AppCompatActivity {
         return null;
     }
 
+
+    @Override
+    public PhotoViewer.PlaceProviderObject getPlaceForPhoto(Object messageObject, TLRPC.FileLocation fileLocation, int index) {
+        PhotoPickerPhotoCell cell = getCellForIndex(index);
+        if (cell != null) {
+            int coords[] = new int[2];
+            cell.photoImage.getLocationInWindow(coords);
+            PhotoViewer.PlaceProviderObject object = new PhotoViewer.PlaceProviderObject();
+            object.viewX = coords[0];
+            object.viewY = coords[1] - AndroidUtilities.statusBarHeight;
+            if (Build.VERSION.SDK_INT < 11) {
+                float scale = ViewProxy.getScaleX(cell.photoImage);
+                if (scale != 1) {
+                    int width = cell.photoImage.getMeasuredWidth();
+                    object.viewX += (width - width * scale) / 2;
+                    object.viewY += (width - width * scale) / 2;
+                }
+            }
+            object.parentView = listView;
+            object.imageReceiver = cell.photoImage.getImageReceiver();
+            object.thumb = object.imageReceiver.getBitmap();
+            object.scale = ViewProxy.getScaleX(cell.photoImage);
+            cell.checkBox.setVisibility(View.GONE);
+            return object;
+        }
+        return null;
+    }
+
+    @Override
+    public Bitmap getThumbForPhoto(Object messageObject, TLRPC.FileLocation fileLocation, int index) {
+        PhotoPickerPhotoCell cell = getCellForIndex(index);
+        if (cell != null) {
+            return cell.photoImage.getImageReceiver().getBitmap();
+        }
+        return null;
+    }
+
+    @Override
+    public void willSwitchFromPhoto(Object messageObject, TLRPC.FileLocation fileLocation, int index) {
+        int count = listView.getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = listView.getChildAt(a);
+            if (view.getTag() == null) {
+                continue;
+            }
+            PhotoPickerPhotoCell cell = (PhotoPickerPhotoCell) view;
+            int num = (Integer) view.getTag();
+            if (selectedAlbum != null) {
+                if (num < 0 || num >= selectedAlbum.photos.size()) {
+                    continue;
+                }
+            } else {
+                ArrayList<AndroidUtilities.SearchImage> array;
+                if (searchResult.isEmpty() && lastSearchString == null) {
+                    array = recentImages;
+                } else {
+                    array = searchResult;
+                }
+                if (num < 0 || num >= array.size()) {
+                    continue;
+                }
+            }
+            if (num == index) {
+                cell.checkBox.setVisibility(View.VISIBLE);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void willHidePhotoViewer() {
+        if (listAdapter != null) {
+            listAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public boolean isPhotoChecked(int index) {
+        if (selectedAlbum != null) {
+            return !(index < 0 || index >= selectedAlbum.photos.size()) && selectedPhotos.containsKey(selectedAlbum.photos.get(index).imageId);
+        } else {
+            ArrayList<AndroidUtilities.SearchImage> array;
+            if (searchResult.isEmpty() && lastSearchString == null) {
+                array = recentImages;
+            } else {
+                array = searchResult;
+            }
+            return !(index < 0 || index >= array.size()) && selectedWebPhotos.containsKey(array.get(index).id);
+        }
+    }
+
+    @Override
+    public void setPhotoChecked(int index) {
+        boolean add = true;
+        if (selectedAlbum != null) {
+            if (index < 0 || index >= selectedAlbum.photos.size()) {
+                return;
+            }
+            AndroidUtilities.PhotoEntry photoEntry = selectedAlbum.photos.get(index);
+            if (selectedPhotos.containsKey(photoEntry.imageId)) {
+                selectedPhotos.remove(photoEntry.imageId);
+                add = false;
+            } else {
+                selectedPhotos.put(photoEntry.imageId, photoEntry);
+            }
+        } else {
+            AndroidUtilities.SearchImage photoEntry;
+            ArrayList<AndroidUtilities.SearchImage> array;
+            if (searchResult.isEmpty() && lastSearchString == null) {
+                array = recentImages;
+            } else {
+                array = searchResult;
+            }
+            if (index < 0 || index >= array.size()) {
+                return;
+            }
+            photoEntry = array.get(index);
+            if (selectedWebPhotos.containsKey(photoEntry.id)) {
+                selectedWebPhotos.remove(photoEntry.id);
+                add = false;
+            } else {
+                selectedWebPhotos.put(photoEntry.id, photoEntry);
+            }
+        }
+        int count = listView.getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = listView.getChildAt(a);
+            int num = (Integer) view.getTag();
+            if (num == index) {
+                ((PhotoPickerPhotoCell) view).setChecked(add, false);
+                break;
+            }
+        }
+        pickerBottomLayout.setText(getResources().getQuantityString(R.plurals.selected_images, selectedPhotos.size(), selectedPhotos.size()));
+        delegate.selectedPhotosChanged();
+    }
+
+    @Override
+    public boolean cancelButtonPressed() {
+        delegate.actionButtonPressed(true);
+
+        return true;
+    }
+
+    @Override
+    public void sendButtonPressed(int index) {
+        if (selectedAlbum != null) {
+            if (selectedPhotos.isEmpty()) {
+                if (index < 0 || index >= selectedAlbum.photos.size()) {
+                    return;
+                }
+                AndroidUtilities.PhotoEntry photoEntry = selectedAlbum.photos.get(index);
+                selectedPhotos.put(photoEntry.imageId, photoEntry);
+            }
+        } else if (selectedPhotos.isEmpty()) {
+            ArrayList<AndroidUtilities.SearchImage> array;
+            if (searchResult.isEmpty() && lastSearchString == null) {
+                array = recentImages;
+            } else {
+                array = searchResult;
+            }
+            if (index < 0 || index >= array.size()) {
+                return;
+            }
+            AndroidUtilities.SearchImage photoEntry = array.get(index);
+            selectedWebPhotos.put(photoEntry.id, photoEntry);
+        }
+//        sendSelectedPhotos();
+    }
+
+    @Override
+    public int getSelectedCount() {
+        return selectedPhotos.size() + selectedWebPhotos.size();
+    }
 
     public void updatePhotoAtIndex(int index) {
         PhotoPickerPhotoCell cell = getCellForIndex(index);

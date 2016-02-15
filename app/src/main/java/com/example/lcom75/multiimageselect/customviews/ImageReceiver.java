@@ -31,6 +31,17 @@ import com.example.lcom75.multiimageselect.tgnet.TLRPC;
 
 public class ImageReceiver implements NotificationCenter.NotificationCenterDelegate {
 
+    private Object parentMessageObject;
+    private Object parentObject;
+
+    public void setParentMessageObject(Object parentMessageObject) {
+        this.parentMessageObject = parentMessageObject;
+    }
+
+    public void setParentObject(Object parentObject) {
+        this.parentObject = parentObject;
+    }
+
     public interface ImageReceiverDelegate {
         void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb);
     }

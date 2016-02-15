@@ -9,9 +9,25 @@
     tools:showIn="@layout/activity_photo_picker">
 
     <GridView
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"
         android:id="@+id/gridView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:minHeight="32dp">
+
+        <TextView
+            android:id="@+id/pickerBottomLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@android:color/darker_gray" />
+
+    </LinearLayout>
 </RelativeLayout>

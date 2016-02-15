@@ -50,7 +50,7 @@ public class ConnectionsManager {
     private boolean appPaused = true;
     private int lastClassGuid = 1;
     private boolean isUpdating = false;
-    private int connectionState = native_getConnectionState();
+//    private int connectionState = native_getConnectionState();
     private volatile int lastRequestToken = 1;
     private PowerManager.WakeLock wakeLock = null;
 
@@ -67,6 +67,10 @@ public class ConnectionsManager {
             }
         }
         return localInstance;
+    }
+
+    public int generateClassGuid() {
+        return lastClassGuid++;
     }
 
     public ConnectionsManager() {
@@ -272,5 +276,8 @@ public class ConnectionsManager {
 
     public void cancelRequest(int token, boolean notifyServer) {
         native_cancelRequest(token, notifyServer);
+    }
+
+    public void cancelRequestsForGuid(int classGuid) {
     }
 }

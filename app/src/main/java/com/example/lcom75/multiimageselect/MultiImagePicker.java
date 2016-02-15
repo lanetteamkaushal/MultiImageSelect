@@ -70,6 +70,7 @@ public class MultiImagePicker extends AppCompatActivity implements NotificationC
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.albumsDidLoaded);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.recentImagesDidLoaded);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.closeChats);
+        selectedPhotos = ApplicationLoader.selectedPhotos;
     }
 
     @Override
@@ -230,40 +231,9 @@ public class MultiImagePicker extends AppCompatActivity implements NotificationC
                 recentImages = recentGifImages;
             }
         }
-        Intent intent = new Intent(MultiImagePicker.this,PhotoPickerActivity.class);
+        Intent intent = new Intent(MultiImagePicker.this, PhotoPickerActivity.class);
         ApplicationLoader.albumEntry = albumEntry;
         ApplicationLoader.selectedPhotos = selectedPhotos;
-        startActivityForResult(intent,4444);
-//        PhotoPickerActivity fragment = new PhotoPickerActivity(type, albumEntry, selectedPhotos, selectedWebPhotos, recentImages, singlePhoto, chatActivity);
-//        fragment.setDelegate(new PhotoPickerActivity.PhotoPickerActivityDelegate() {
-//            @Override
-//            public void selectedPhotosChanged() {
-//                if (pickerBottomLayout != null) {
-//                    pickerBottomLayout.updateSelectedCount(selectedPhotos.size() + selectedWebPhotos.size(), true);
-//                }
-//            }
-//
-//            @Override
-//            public void actionButtonPressed(boolean canceled) {
-//                removeSelfFromStack();
-//                if (!canceled) {
-//                    sendSelectedPhotos();
-//                }
-//            }
-//
-//            @Override
-//            public boolean didSelectVideo(String path) {
-//                removeSelfFromStack();
-//                return delegate.didSelectVideo(path);
-//            }
-//        });
-//        presentFragment(fragment);
+        startActivityForResult(intent, 4444);
     }
-
-//    public void removeSelfFromStack() {
-//        if (isFinished || parentLayout == null) {
-//            return;
-//        }
-//        parentLayout.removeFragmentFromStack(this);
-//    }
 }
