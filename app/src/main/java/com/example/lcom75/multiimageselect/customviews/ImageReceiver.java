@@ -61,7 +61,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     private View parentView;
     private Integer tag;
     private Integer thumbTag;
-//    private MessageObject parentMessageObject;
+    //    private MessageObject parentMessageObject;
     private boolean canceledLoading;
 
     private SetImageBackup setImageBackup;
@@ -508,6 +508,167 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
+    private void drawDrawable(Canvas canvas, Drawable drawable, int alpha, boolean isBackImage) {
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+
+            Paint paint = bitmapDrawable.getPaint();
+            boolean hasFilter = paint != null && paint.getColorFilter() != null;
+            if (hasFilter && !isPressed) {
+                bitmapDrawable.setColorFilter(null);
+            } else if (!hasFilter && isPressed) {
+                bitmapDrawable.setColorFilter(new PorterDuffColorFilter(0xffdddddd, PorterDuff.Mode.MULTIPLY));
+            }
+            if (colorFilter != null) {
+                bitmapDrawable.setColorFilter(colorFilter);
+            }
+            if (bitmapShader != null) {
+                drawRegion.set(imageX, imageY, imageX + imageW, imageY + imageH);
+                if (isVisible) {
+                    roundRect.set(drawRegion);
+                    shaderMatrix.reset();
+                    shaderMatrix.setRectToRect(bitmapRect, roundRect, Matrix.ScaleToFit.FILL);
+                    bitmapShader.setLocalMatrix(shaderMatrix);
+                    roundPaint.setAlpha(alpha);
+                    canvas.drawRoundRect(roundRect, roundRadius, roundRadius, roundPaint);
+                }
+            } else {
+                int bitmapW;
+                int bitmapH;
+                if (orientation == 90 || orientation == 270) {
+                    bitmapW = bitmapDrawable.getIntrinsicHeight();
+                    bitmapH = bitmapDrawable.getIntrinsicWidth();
+                } else {
+                    bitmapW = bitmapDrawable.getIntrinsicWidth();
+                    bitmapH = bitmapDrawable.getIntrinsicHeight();
+                }
+                float scaleW = bitmapW / (float) imageW;
+                float scaleH = bitmapH / (float) imageH;
+
+                if (isAspectFit) {
+                    float scale = Math.max(scaleW, scaleH);
+                    canvas.save();
+                    bitmapW /= scale;
+                    bitmapH /= scale;
+                    drawRegion.set(imageX + (imageW - bitmapW) / 2, imageY + (imageH - bitmapH) / 2, imageX + (imageW + bitmapW) / 2, imageY + (imageH + bitmapH) / 2);
+                    bitmapDrawable.setBounds(drawRegion);
+                    try {
+                        bitmapDrawable.setAlpha(alpha);
+                        bitmapDrawable.draw(canvas);
+                    } catch (Exception e) {
+                        if (bitmapDrawable == currentImage && currentKey != null) {
+                            ImageLoader.getInstance().removeImage(currentKey);
+                            currentKey = null;
+                        } else if (bitmapDrawable == currentThumb && currentThumbKey != null) {
+                            ImageLoader.getInstance().removeImage(currentThumbKey);
+                            currentThumbKey = null;
+                        }
+                        setImage(currentImageLocation, currentHttpUrl, currentFilter, currentThumb, currentThumbLocation, currentThumbFilter, currentSize, currentExt, currentCacheOnly);
+                        Log.e("tmessages", e.getMessage());
+                    }
+                    canvas.restore();
+                } else {
+                    if (Math.abs(scaleW - scaleH) > 0.00001f) {
+                        canvas.save();
+                        canvas.clipRect(imageX, imageY, imageX + imageW, imageY + imageH);
+
+                        if (orientation != 0) {
+                            if (centerRotation) {
+                                canvas.rotate(orientation, imageW / 2, imageH / 2);
+                            } else {
+                                canvas.rotate(orientation, 0, 0);
+                            }
+                        }
+
+                        if (bitmapW / scaleH > imageW) {
+                            bitmapW /= scaleH;
+                            drawRegion.set(imageX - (bitmapW - imageW) / 2, imageY, imageX + (bitmapW + imageW) / 2, imageY + imageH);
+                        } else {
+                            bitmapH /= scaleW;
+                            drawRegion.set(imageX, imageY - (bitmapH - imageH) / 2, imageX + imageW, imageY + (bitmapH + imageH) / 2);
+                        }
+                        int setY = (1632 - (drawRegion.bottom - drawRegion.top)) / 2;
+                        drawRegion.set(drawRegion.left, setY, drawRegion.right, drawRegion.bottom);
+                        if (orientation == 90 || orientation == 270) {
+                            int width = (drawRegion.right - drawRegion.left) / 2;
+                            int height = (drawRegion.bottom - drawRegion.top) / 2;
+                            int centerX = (drawRegion.right + drawRegion.left) / 2;
+                            int centerY = (drawRegion.top + drawRegion.bottom) / 2;
+                            bitmapDrawable.setBounds(centerX - height, centerY - width, centerX + height, centerY + width);
+                        } else {
+                            bitmapDrawable.setBounds(drawRegion);
+                        }
+                        if (isVisible) {
+                            try {
+                                bitmapDrawable.setAlpha(alpha);
+                                bitmapDrawable.draw(canvas);
+                            } catch (Exception e) {
+                                if (bitmapDrawable == currentImage && currentKey != null) {
+                                    ImageLoader.getInstance().removeImage(currentKey);
+                                    currentKey = null;
+                                } else if (bitmapDrawable == currentThumb && currentThumbKey != null) {
+                                    ImageLoader.getInstance().removeImage(currentThumbKey);
+                                    currentThumbKey = null;
+                                }
+                                setImage(currentImageLocation, currentHttpUrl, currentFilter, currentThumb, currentThumbLocation, currentThumbFilter, currentSize, currentExt, currentCacheOnly);
+                                Log.e("tmessages", e.getMessage());
+                            }
+                        }
+
+                        canvas.restore();
+                    } else {
+                        canvas.save();
+                        if (orientation != 0) {
+                            if (centerRotation) {
+                                canvas.rotate(orientation, imageW / 2, imageH / 2);
+                            } else {
+                                canvas.rotate(orientation, 0, 0);
+                            }
+                        }
+                        drawRegion.set(imageX, imageY, imageX + imageW, imageY + imageH);
+                        if (orientation == 90 || orientation == 270) {
+                            int width = (drawRegion.right - drawRegion.left) / 2;
+                            int height = (drawRegion.bottom - drawRegion.top) / 2;
+                            int centerX = (drawRegion.right + drawRegion.left) / 2;
+                            int centerY = (drawRegion.top + drawRegion.bottom) / 2;
+                            bitmapDrawable.setBounds(centerX - height, centerY - width, centerX + height, centerY + width);
+                        } else {
+                            bitmapDrawable.setBounds(drawRegion);
+                        }
+                        if (isVisible) {
+                            try {
+                                bitmapDrawable.setAlpha(alpha);
+                                bitmapDrawable.draw(canvas);
+                            } catch (Exception e) {
+                                if (bitmapDrawable == currentImage && currentKey != null) {
+                                    ImageLoader.getInstance().removeImage(currentKey);
+                                    currentKey = null;
+                                } else if (bitmapDrawable == currentThumb && currentThumbKey != null) {
+                                    ImageLoader.getInstance().removeImage(currentThumbKey);
+                                    currentThumbKey = null;
+                                }
+                                setImage(currentImageLocation, currentHttpUrl, currentFilter, currentThumb, currentThumbLocation, currentThumbFilter, currentSize, currentExt, currentCacheOnly);
+                                Log.e("tmessages", e.getMessage());
+                            }
+                        }
+                        canvas.restore();
+                    }
+                }
+            }
+        } else {
+            drawRegion.set(imageX, imageY, imageX + imageW, imageY + imageH);
+            drawable.setBounds(drawRegion);
+            if (isVisible) {
+                try {
+                    drawable.setAlpha(alpha);
+                    drawable.draw(canvas);
+                } catch (Exception e) {
+                    Log.e("tmessages", e.getMessage());
+                }
+            }
+        }
+    }
+
     private void checkAlphaAnimation(boolean skip) {
         if (currentAlpha != 1) {
             if (!skip) {
@@ -565,6 +726,60 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     }
                 } else {
                     drawDrawable(canvas, drawable, (int) (overrideAlpha * 255));
+                }
+
+                checkAlphaAnimation(animationNotReady && crossfadeWithThumb);
+                return true;
+            } else if (staticThumb != null) {
+                drawDrawable(canvas, staticThumb, 255);
+                checkAlphaAnimation(animationNotReady);
+                return true;
+            } else {
+                checkAlphaAnimation(animationNotReady);
+            }
+        } catch (Exception e) {
+            Log.e("tmessages", e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean draw(Canvas canvas, boolean isBackImage) {
+        try {
+            Drawable drawable = null;
+            boolean animationNotReady = currentImage instanceof AnimatedFileDrawable && !((AnimatedFileDrawable) currentImage).hasBitmap();
+            if (!forcePreview && currentImage != null && !animationNotReady) {
+                drawable = currentImage;
+            } else if (staticThumb instanceof BitmapDrawable) {
+                drawable = staticThumb;
+            } else if (currentThumb != null) {
+                drawable = currentThumb;
+            }
+            if (drawable != null) {
+                if (crossfadeAlpha != 0) {
+                    if (crossfadeWithThumb && animationNotReady) {
+                        drawDrawable(canvas, drawable, (int) (overrideAlpha * 255),isBackImage);
+                    } else {
+                        if (crossfadeWithThumb && currentAlpha != 1.0f) {
+                            Drawable thumbDrawable = null;
+                            if (drawable == currentImage) {
+                                if (staticThumb != null) {
+                                    thumbDrawable = staticThumb;
+                                } else if (currentThumb != null) {
+                                    thumbDrawable = currentThumb;
+                                }
+                            } else if (drawable == currentThumb) {
+                                if (staticThumb != null) {
+                                    thumbDrawable = staticThumb;
+                                }
+                            }
+                            if (thumbDrawable != null) {
+                                drawDrawable(canvas, thumbDrawable, (int) (overrideAlpha * 255),isBackImage);
+                            }
+                        }
+                        drawDrawable(canvas, drawable, (int) (overrideAlpha * currentAlpha * 255),isBackImage);
+                    }
+                } else {
+                    drawDrawable(canvas, drawable, (int) (overrideAlpha * 255),isBackImage);
                 }
 
                 checkAlphaAnimation(animationNotReady && crossfadeWithThumb);

@@ -6,7 +6,7 @@
  * Copyright Nikolai Kudashov, 2013-2016.
  */
 
-package com.example.lcom75.multiimageselect.customviews;
+package com.example.lcom75.multiimageselect.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.example.lcom75.multiimageselect.AndroidUtilities;
 import com.example.lcom75.multiimageselect.MediaController;
+import com.example.lcom75.multiimageselect.customviews.PhotoCell;
 
 import java.util.HashMap;
 

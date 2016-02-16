@@ -8,7 +8,10 @@
 
 package com.example.lcom75.multiimageselect.customviews;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -19,7 +22,7 @@ import com.example.lcom75.multiimageselect.R;
 
 public class PhotoPickerPhotoCell extends FrameLayout {
 
-    public BackupImageView photoImage;
+    public PreviewBIV photoImage;
     public FrameLayout checkFrame;
     public CheckBox checkBox;
     public int itemWidth;
@@ -27,8 +30,11 @@ public class PhotoPickerPhotoCell extends FrameLayout {
 
     public PhotoPickerPhotoCell(Context context) {
         super(context);
+        init(context);
+    }
 
-        photoImage = new BackupImageView(context);
+    private void init(Context context) {
+        photoImage = new PreviewBIV(context);
         addView(photoImage, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         checkedView = new View(context);
@@ -45,9 +51,28 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         addView(checkBox, LayoutHelper.createFrame(30, 30, Gravity.RIGHT | Gravity.TOP, 0, 4, 4, 0));
     }
 
+    public PhotoPickerPhotoCell(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public PhotoPickerPhotoCell(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public PhotoPickerPhotoCell(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init(context);
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(itemWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(itemWidth, MeasureSpec.EXACTLY));
+        if (itemWidth > 0)
+            super.onMeasure(MeasureSpec.makeMeasureSpec(itemWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(itemWidth, MeasureSpec.EXACTLY));
+        else
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     public void setChecked(final boolean checked, boolean animated) {

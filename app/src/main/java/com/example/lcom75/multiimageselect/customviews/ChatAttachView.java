@@ -24,7 +24,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
@@ -34,9 +33,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.lcom75.multiimageselect.AndroidUtilities;
-import com.example.lcom75.multiimageselect.MediaController;
 import com.example.lcom75.multiimageselect.NotificationCenter;
 import com.example.lcom75.multiimageselect.R;
+import com.example.lcom75.multiimageselect.adapter.PhotoAttachAdapter;
 import com.example.lcom75.multiimageselect.tgnet.TLRPC;
 
 import java.util.ArrayList;

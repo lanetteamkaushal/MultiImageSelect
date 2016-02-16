@@ -34,6 +34,7 @@ import com.example.lcom75.multiimageselect.customviews.FileLog;
 import com.example.lcom75.multiimageselect.tgnet.TLRPC;
 
 import java.io.File;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -373,7 +374,7 @@ public class AndroidUtilities {
         }
     }
 
-    public static class PhotoEntry {
+    public static class PhotoEntry implements Serializable{
         public int bucketId;
         public int imageId;
         public long dateTaken;
