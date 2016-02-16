@@ -22,6 +22,10 @@ import com.example.lcom75.multiimageselect.tgnet.TLRPC;
 
 public class BackupImageView extends View {
 
+    public void setImageReceiver(ImageReceiver imageReceiver) {
+        this.imageReceiver = imageReceiver;
+    }
+
     private ImageReceiver imageReceiver;
     private int width = -1;
     private int height = -1;

@@ -24,7 +24,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
@@ -34,7 +33,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.lcom75.multiimageselect.AndroidUtilities;
-import com.example.lcom75.multiimageselect.MediaController;
 import com.example.lcom75.multiimageselect.NotificationCenter;
 import com.example.lcom75.multiimageselect.R;
 import com.example.lcom75.multiimageselect.tgnet.TLRPC;
@@ -57,6 +55,12 @@ public class ChatAttachView extends FrameLayout implements NotificationCenter.No
     private View lineView;
     private ProgressBar progressView;
 
+    public void setParentForPhoto(ViewGroup parentForPhoto) {
+        this.parentForPhoto = parentForPhoto;
+    }
+
+    boolean firstTime = true;
+    private ViewGroup parentForPhoto;
     private float[] distCache = new float[20];
 
     private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
@@ -145,8 +149,21 @@ public class ChatAttachView extends FrameLayout implements NotificationCenter.No
                 if (position < 0 || position >= arrayList.size()) {
                     return;
                 }
-                PhotoViewer.getInstance().setParentActivity(baseFragment);
-                PhotoViewer.getInstance().openPhotoForSelect(arrayList, position, 0, ChatAttachView.this, baseFragment);
+                PhotoViewerList.getInstance().setParentActivity(baseFragment);
+                try {
+                    PhotoViewer.getInstance().closePhoto(false, false);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (!firstTime) {
+                    PhotoViewerList.getInstance().setImageIndex(position, false);
+                } else {
+                    if (parentForPhoto != null)
+                        PhotoViewerList.getInstance().openPhotoForSelect(arrayList, position, 0, ChatAttachView.this, baseFragment, parentForPhoto);
+                    else
+                        PhotoViewerList.getInstance().openPhotoForSelect(arrayList, position, 0, ChatAttachView.this, baseFragment);
+                    firstTime = false;
+                }
 //                AndroidUtilities.hideKeyboard(baseFragment.getFragmentView().findFocus());
             }
         });

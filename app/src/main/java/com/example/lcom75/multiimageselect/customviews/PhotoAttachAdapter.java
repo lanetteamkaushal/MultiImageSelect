@@ -64,7 +64,7 @@ public class PhotoAttachAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        PhotoCell cell = (PhotoCell) holder.itemView;
+        PhotoAttachPhotoCell cell = (PhotoAttachPhotoCell) holder.itemView;
         AndroidUtilities.PhotoEntry photoEntry = AndroidUtilities.allPhotosAlbumEntry.photos.get(position);
         cell.setPhotoEntry(photoEntry, position == AndroidUtilities.allPhotosAlbumEntry.photos.size() - 1);
         cell.setChecked(selectedPhotos.containsKey(photoEntry.imageId), false);
@@ -74,10 +74,10 @@ public class PhotoAttachAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        PhotoCell cell = new PhotoCell(mContext, false);
-        cell.setDelegate(new PhotoCell.PhotoAttachPhotoCellDelegate() {
+        PhotoAttachPhotoCell cell = new PhotoAttachPhotoCell(mContext, false);
+        cell.setDelegate(new PhotoAttachPhotoCell.PhotoAttachPhotoCellDelegate() {
             @Override
-            public void onCheckClick(PhotoCell v) {
+            public void onCheckClick(PhotoAttachPhotoCell v) {
                 AndroidUtilities.PhotoEntry photoEntry = v.getPhotoEntry();
                 if (selectedPhotos.containsKey(photoEntry.imageId)) {
                     selectedPhotos.remove(photoEntry.imageId);

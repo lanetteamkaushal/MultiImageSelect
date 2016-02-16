@@ -6,17 +6,22 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.example.lcom75.multiimageselect.customviews.ChatAttachView;
+import com.example.lcom75.multiimageselect.customviews.PhotoViewer;
 
 public class MainActivity extends AppCompatActivity {
 
     FrameLayout frameLayout;
+    FrameLayout flPreview;
     ChatAttachView chatAttachView;
+    private String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +38,18 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        flPreview = (FrameLayout) findViewById(R.id.flPreview);
         frameLayout = (FrameLayout) findViewById(R.id.chatAttachView);
+        frameLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d(TAG, "ME :"+event.getAction());
+                return false;
+            }
+        });
         chatAttachView = new ChatAttachView(this);
         chatAttachView.init(this);
+        chatAttachView.setParentForPhoto(flPreview);
         frameLayout.addView(chatAttachView);
 //        startActivity(new Intent(MainActivity.this,MultiImagePicker.class));
     }
