@@ -20,26 +20,26 @@ import com.example.lcom75.multiimageselect.AndroidUtilities;
 import com.example.lcom75.multiimageselect.R;
 
 
-public class PhotoPickerPhotoCell extends FrameLayout {
+public class PhotoPreviewCell extends FrameLayout {
 
-    public BackupImageView photoImage;
+    public PreviewBIV photoImage;
     public FrameLayout checkFrame;
     public CheckBox checkBox;
     public int itemWidth;
-    public View checkedView;
+//    public View checkedView;
 
-    public PhotoPickerPhotoCell(Context context) {
+    public PhotoPreviewCell(Context context) {
         super(context);
         init(context);
     }
 
     private void init(Context context) {
-        photoImage = new BackupImageView(context);
+        photoImage = new PreviewBIV(context);
         addView(photoImage, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        checkedView = new View(context);
-        addView(checkedView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-        checkedView.setBackgroundColor(context.getResources().getColor(R.color.checkedColor));
+//        checkedView = new View(context);
+//        addView(checkedView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+//        checkedView.setBackgroundColor(context.getResources().getColor(R.color.checkedColor));
         checkFrame = new FrameLayout(context);
         addView(checkFrame, LayoutHelper.createFrame(42, 42, Gravity.RIGHT | Gravity.TOP));
 
@@ -51,32 +51,35 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         addView(checkBox, LayoutHelper.createFrame(30, 30, Gravity.RIGHT | Gravity.TOP, 0, 4, 4, 0));
     }
 
-    public PhotoPickerPhotoCell(Context context, AttributeSet attrs) {
+    public PhotoPreviewCell(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public PhotoPickerPhotoCell(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PhotoPreviewCell(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public PhotoPickerPhotoCell(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public PhotoPreviewCell(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(itemWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(itemWidth, MeasureSpec.EXACTLY));
+        if (itemWidth > 0)
+            super.onMeasure(MeasureSpec.makeMeasureSpec(itemWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(itemWidth, MeasureSpec.EXACTLY));
+        else
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     public void setChecked(final boolean checked, boolean animated) {
         checkBox.setChecked(checked, false);
 //        setBackgroundColor(checked ? 0xff0A0A0A : 0);
 //        setBackgroundColor(checked ? 0xff0A0A0A : 0);
-        checkedView.setVisibility(checked ? VISIBLE : GONE);
+//        checkedView.setVisibility(checked ? VISIBLE : GONE);
 //        ViewProxy.setScaleX(photoImage, checked ? 0.85f : 1.0f);
 //        ViewProxy.setScaleY(photoImage, checked ? 0.85f : 1.0f);
     }

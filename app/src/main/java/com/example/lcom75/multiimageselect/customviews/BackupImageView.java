@@ -132,7 +132,7 @@ public class BackupImageView extends View {
         } else {
             imageReceiver.setImageCoords(0, 0, getWidth(), getHeight());
         }
-        imageReceiver.draw(canvas,true);
+        imageReceiver.draw(canvas);
     }
 
     public void setImage(String httpUrl, String filter, Bitmap thumb, String ext, int size) {

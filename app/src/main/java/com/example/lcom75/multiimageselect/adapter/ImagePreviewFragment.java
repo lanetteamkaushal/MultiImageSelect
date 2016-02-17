@@ -10,6 +10,7 @@ import com.example.lcom75.multiimageselect.AndroidUtilities;
 import com.example.lcom75.multiimageselect.R;
 import com.example.lcom75.multiimageselect.customviews.BackupImageView;
 import com.example.lcom75.multiimageselect.customviews.PhotoPickerPhotoCell;
+import com.example.lcom75.multiimageselect.customviews.PhotoPreviewCell;
 
 import java.util.Locale;
 
@@ -56,7 +57,7 @@ public class ImagePreviewFragment extends Fragment {
         // Inflate the layout containing a title and body text.
 //        ViewGroup view = (ViewGroup) inflater
 //                .inflate(R.layout.pager_item, container, false);
-        PhotoPickerPhotoCell view = new PhotoPickerPhotoCell(getContext());
+        PhotoPreviewCell view = new PhotoPreviewCell(getContext());
         BackupImageView imageView = view.photoImage;
         imageView.setSize(1080, 1120);
         imageView.setTag(mPageNumber);

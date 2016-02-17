@@ -33,6 +33,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     private Object parentMessageObject;
     private Object parentObject;
+    private String TAG = ImageReceiver.class.getSimpleName();
 
     public void setParentMessageObject(Object parentMessageObject) {
         this.parentMessageObject = parentMessageObject;
@@ -589,6 +590,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         }
                         int setY = (1632 - (drawRegion.bottom - drawRegion.top)) / 2;
                         drawRegion.set(drawRegion.left, setY, drawRegion.right, drawRegion.bottom);
+                        Log.d(TAG, "Drawregion :" + drawRegion.toString());
                         if (orientation == 90 || orientation == 270) {
                             int width = (drawRegion.right - drawRegion.left) / 2;
                             int height = (drawRegion.bottom - drawRegion.top) / 2;
@@ -757,7 +759,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             if (drawable != null) {
                 if (crossfadeAlpha != 0) {
                     if (crossfadeWithThumb && animationNotReady) {
-                        drawDrawable(canvas, drawable, (int) (overrideAlpha * 255),isBackImage);
+                        drawDrawable(canvas, drawable, (int) (overrideAlpha * 255), isBackImage);
                     } else {
                         if (crossfadeWithThumb && currentAlpha != 1.0f) {
                             Drawable thumbDrawable = null;
@@ -773,13 +775,13 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                                 }
                             }
                             if (thumbDrawable != null) {
-                                drawDrawable(canvas, thumbDrawable, (int) (overrideAlpha * 255),isBackImage);
+                                drawDrawable(canvas, thumbDrawable, (int) (overrideAlpha * 255), isBackImage);
                             }
                         }
-                        drawDrawable(canvas, drawable, (int) (overrideAlpha * currentAlpha * 255),isBackImage);
+                        drawDrawable(canvas, drawable, (int) (overrideAlpha * currentAlpha * 255), isBackImage);
                     }
                 } else {
-                    drawDrawable(canvas, drawable, (int) (overrideAlpha * 255),isBackImage);
+                    drawDrawable(canvas, drawable, (int) (overrideAlpha * 255), isBackImage);
                 }
 
                 checkAlphaAnimation(animationNotReady && crossfadeWithThumb);
