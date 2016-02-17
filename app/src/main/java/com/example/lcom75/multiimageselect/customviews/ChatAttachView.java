@@ -35,6 +35,7 @@ import android.widget.TextView;
 import com.example.lcom75.multiimageselect.AndroidUtilities;
 import com.example.lcom75.multiimageselect.NotificationCenter;
 import com.example.lcom75.multiimageselect.R;
+import com.example.lcom75.multiimageselect.adapter.PhotoAttachAdapter;
 import com.example.lcom75.multiimageselect.tgnet.TLRPC;
 
 import java.util.ArrayList;

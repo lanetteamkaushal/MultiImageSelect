@@ -22,13 +22,9 @@ import com.example.lcom75.multiimageselect.tgnet.TLRPC;
 
 public class BackupImageView extends View {
 
-    public void setImageReceiver(ImageReceiver imageReceiver) {
-        this.imageReceiver = imageReceiver;
-    }
-
-    private ImageReceiver imageReceiver;
-    private int width = -1;
-    private int height = -1;
+    protected ImageReceiver imageReceiver;
+    protected int width = -1;
+    protected int height = -1;
 
     public BackupImageView(Context context) {
         super(context);
@@ -137,5 +133,9 @@ public class BackupImageView extends View {
             imageReceiver.setImageCoords(0, 0, getWidth(), getHeight());
         }
         imageReceiver.draw(canvas);
+    }
+
+    public void setImage(String httpUrl, String filter, Bitmap thumb, String ext, int size) {
+        imageReceiver.setImage(httpUrl, filter, thumb != null ? new BitmapDrawable(null, thumb) : null, null, size);
     }
 }

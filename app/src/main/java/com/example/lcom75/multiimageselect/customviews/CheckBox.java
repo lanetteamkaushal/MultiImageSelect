@@ -136,41 +136,43 @@ public class CheckBox extends View {
         if (drawBackground || progress != 0) {
             eraser2.setStrokeWidth(AndroidUtilities.dp(size + 6));
 
-            drawBitmap.eraseColor(0);
-            float rad = getMeasuredWidth() / 2;
+            if (drawBitmap != null) {
+                drawBitmap.eraseColor(0);
+                float rad = getMeasuredWidth() / 2;
 
-            float roundProgress = progress >= 0.5f ? 1.0f : progress / 0.5f;
-            float checkProgress = progress < 0.5f ? 0.0f : (progress - 0.5f) / 0.5f;
+                float roundProgress = progress >= 0.5f ? 1.0f : progress / 0.5f;
+                float checkProgress = progress < 0.5f ? 0.0f : (progress - 0.5f) / 0.5f;
 
-            float roundProgressCheckState = isCheckAnimation ? progress : (1.0f - progress);
-            if (roundProgressCheckState < progressBounceDiff) {
-                rad -= AndroidUtilities.dp(2) * roundProgressCheckState / progressBounceDiff;
-            } else if (roundProgressCheckState < progressBounceDiff * 2) {
-                rad -= AndroidUtilities.dp(2) - AndroidUtilities.dp(2) * (roundProgressCheckState - progressBounceDiff) / progressBounceDiff;
+                float roundProgressCheckState = isCheckAnimation ? progress : (1.0f - progress);
+                if (roundProgressCheckState < progressBounceDiff) {
+                    rad -= AndroidUtilities.dp(2) * roundProgressCheckState / progressBounceDiff;
+                } else if (roundProgressCheckState < progressBounceDiff * 2) {
+                    rad -= AndroidUtilities.dp(2) - AndroidUtilities.dp(2) * (roundProgressCheckState - progressBounceDiff) / progressBounceDiff;
+                }
+                if (drawBackground) {
+                    paint.setColor(0x44000000);
+                    canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, rad - AndroidUtilities.dp(1), paint);
+                    canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, rad - AndroidUtilities.dp(1), backgroundPaint);
+                }
+
+                paint.setColor(color);
+
+                bitmapCanvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, rad, paint);
+                bitmapCanvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, rad * (1 - roundProgress), eraser);
+                canvas.drawBitmap(drawBitmap, 0, 0, null);
+
+                checkBitmap.eraseColor(0);
+                int w = checkDrawable.getIntrinsicWidth();
+                int h = checkDrawable.getIntrinsicHeight();
+                int x = (getMeasuredWidth() - w) / 2;
+                int y = (getMeasuredHeight() - h) / 2;
+
+                checkDrawable.setBounds(x, y + checkOffset, x + w, y + h + checkOffset);
+                checkDrawable.draw(checkCanvas);
+                checkCanvas.drawCircle(getMeasuredWidth() / 2 - AndroidUtilities.dp(2.5f), getMeasuredHeight() / 2 + AndroidUtilities.dp(4), ((getMeasuredWidth() + AndroidUtilities.dp(6)) / 2) * (1 - checkProgress), eraser2);
+
+                canvas.drawBitmap(checkBitmap, 0, 0, null);
             }
-            if (drawBackground) {
-                paint.setColor(0x44000000);
-                canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, rad - AndroidUtilities.dp(1), paint);
-                canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, rad - AndroidUtilities.dp(1), backgroundPaint);
-            }
-
-            paint.setColor(color);
-
-            bitmapCanvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, rad, paint);
-            bitmapCanvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, rad * (1 - roundProgress), eraser);
-            canvas.drawBitmap(drawBitmap, 0, 0, null);
-
-            checkBitmap.eraseColor(0);
-            int w = checkDrawable.getIntrinsicWidth();
-            int h = checkDrawable.getIntrinsicHeight();
-            int x = (getMeasuredWidth() - w) / 2;
-            int y = (getMeasuredHeight() - h) / 2;
-
-            checkDrawable.setBounds(x, y + checkOffset, x + w, y + h + checkOffset);
-            checkDrawable.draw(checkCanvas);
-            checkCanvas.drawCircle(getMeasuredWidth() / 2 - AndroidUtilities.dp(2.5f), getMeasuredHeight() / 2 + AndroidUtilities.dp(4), ((getMeasuredWidth() + AndroidUtilities.dp(6)) / 2) * (1 - checkProgress), eraser2);
-
-            canvas.drawBitmap(checkBitmap, 0, 0, null);
         }
     }
 
