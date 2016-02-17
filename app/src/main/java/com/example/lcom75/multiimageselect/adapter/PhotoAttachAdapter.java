@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.example.lcom75.multiimageselect.AndroidUtilities;
 import com.example.lcom75.multiimageselect.MediaController;
+import com.example.lcom75.multiimageselect.customviews.PhotoAttachPhotoCell;
 import com.example.lcom75.multiimageselect.customviews.PhotoCell;
 
 import java.util.HashMap;

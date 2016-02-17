@@ -65,6 +65,11 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
 
     private int classGuid;
     private PhotoViewer.PhotoViewerProvider placeProvider;
+
+    public void setIsVisible(boolean isVisible) {
+        this.isVisible = isVisible;
+    }
+
     private boolean isVisible;
 
     private Activity parentActivity;
@@ -511,17 +516,8 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
 
     private static volatile PhotoViewerList Instance = null;
 
-    public static PhotoViewerList getInstance() {
-        PhotoViewerList localInstance = Instance;
-        if (localInstance == null) {
-            synchronized (PhotoViewerList.class) {
-                localInstance = Instance;
-                if (localInstance == null) {
-                    Instance = localInstance = new PhotoViewerList();
-                }
-            }
-        }
-        return localInstance;
+    public PhotoViewerList getInstance() {
+        return this;
     }
 
     @SuppressWarnings("unchecked")
@@ -664,7 +660,7 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
             @Override
             public boolean dispatchKeyEventPreIme(KeyEvent event) {
                 if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                    PhotoViewerList.getInstance().closePhoto(true, false);
+                    getInstance().closePhoto(true, false);
                     return true;
                 }
                 return super.dispatchKeyEventPreIme(event);
@@ -1585,7 +1581,20 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
 //            fwindowLayoutParams.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED;
             windowView.setFocusable(false);
             containerView.setFocusable(false);
-            parentToAdd.addView(windowView, fwindowLayoutParams);
+            if (windowView.getParent() == null)
+            {
+                Log.d("tmessages", "No parent found");
+                parentToAdd.addView(windowView, fwindowLayoutParams);
+            }
+            else if (!windowView.getParent().getClass().getSimpleName().equals(parentToAdd.getClass().getSimpleName()))
+            {
+                Log.d("tmessages", "Parents doesn't match");
+                parentToAdd.addView(windowView, fwindowLayoutParams);
+            }
+            else
+            {
+                Log.d("tmessages", "Already in same parent :");
+            }
         } catch (Exception e) {
             FileLog.e("tmessages", e);
             return;

@@ -83,4 +83,8 @@ public class PhotoPreviewCell extends FrameLayout {
 //        ViewProxy.setScaleX(photoImage, checked ? 0.85f : 1.0f);
 //        ViewProxy.setScaleY(photoImage, checked ? 0.85f : 1.0f);
     }
+
+    public BackupImageView getImageView() {
+        return photoImage;
+    }
 }

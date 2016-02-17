@@ -150,21 +150,21 @@ public class ChatAttachView extends FrameLayout implements NotificationCenter.No
                 if (position < 0 || position >= arrayList.size()) {
                     return;
                 }
-                PhotoViewerList.getInstance().setParentActivity(baseFragment);
+                PhotoViewer.getInstance().setParentActivity(baseFragment);
                 try {
                     PhotoViewer.getInstance().closePhoto(false, false);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (!firstTime) {
-                    PhotoViewerList.getInstance().setImageIndex(position, false);
-                } else {
-                    if (parentForPhoto != null)
-                        PhotoViewerList.getInstance().openPhotoForSelect(arrayList, position, 0, ChatAttachView.this, baseFragment, parentForPhoto);
-                    else
-                        PhotoViewerList.getInstance().openPhotoForSelect(arrayList, position, 0, ChatAttachView.this, baseFragment);
-                    firstTime = false;
-                }
+//                if (!firstTime) {
+//                    PhotoViewer.getInstance().setImageIndex(position, false);
+//                } else {
+//                    if (parentForPhoto != null)
+//                        PhotoViewer.getInstance().openPhotoForSelect(arrayList, position, 0, ChatAttachView.this, baseFragment, parentForPhoto);
+//                    else
+                PhotoViewer.getInstance().openPhotoForSelect(arrayList, position, 0, ChatAttachView.this, baseFragment);
+//                    firstTime = false;
+//                }
 //                AndroidUtilities.hideKeyboard(baseFragment.getFragmentView().findFocus());
             }
         });

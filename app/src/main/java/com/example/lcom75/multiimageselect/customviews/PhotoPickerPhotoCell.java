@@ -11,6 +11,7 @@ package com.example.lcom75.multiimageselect.customviews;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -79,5 +80,9 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         checkedView.setVisibility(checked ? VISIBLE : GONE);
 //        ViewProxy.setScaleX(photoImage, checked ? 0.85f : 1.0f);
 //        ViewProxy.setScaleY(photoImage, checked ? 0.85f : 1.0f);
+    }
+
+    public BackupImageView getImageView() {
+        return photoImage;
     }
 }

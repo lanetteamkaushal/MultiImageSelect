@@ -1,5 +1,7 @@
 package com.example.lcom75.multiimageselect.adapter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,7 +13,10 @@ import com.example.lcom75.multiimageselect.R;
 import com.example.lcom75.multiimageselect.customviews.BackupImageView;
 import com.example.lcom75.multiimageselect.customviews.PhotoPickerPhotoCell;
 import com.example.lcom75.multiimageselect.customviews.PhotoPreviewCell;
+import com.example.lcom75.multiimageselect.customviews.PhotoViewer;
+import com.example.lcom75.multiimageselect.customviews.PhotoViewerList;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
@@ -24,14 +29,26 @@ public class ImagePreviewFragment extends Fragment {
     public static final String ARG_PAGE = "page";
     public static final String ARG_PHOTOENTRY = "photo_entry";
     AndroidUtilities.PhotoEntry photoEntry = null;
+    ArrayList<Object> arrayList = new ArrayList<>();
     /**
      * The fragment's page number, which is set to the argument value for {@link #ARG_PAGE}.
      */
     private int mPageNumber;
+    PhotoViewer.PhotoViewerProvider photoViewerProvider;
+    PhotoViewerList singleInstace;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        photoViewerProvider = (PhotoViewer.PhotoViewerProvider) context;
+
+    }
 
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
      */
+
+
     public static ImagePreviewFragment create(int pageNumber, AndroidUtilities.PhotoEntry mphotoEntry) {
         ImagePreviewFragment fragment = new ImagePreviewFragment();
         Bundle args = new Bundle();
@@ -57,37 +74,49 @@ public class ImagePreviewFragment extends Fragment {
         // Inflate the layout containing a title and body text.
 //        ViewGroup view = (ViewGroup) inflater
 //                .inflate(R.layout.pager_item, container, false);
+        singleInstace = new PhotoViewerList();
         PhotoPreviewCell view = new PhotoPreviewCell(getContext());
-        BackupImageView imageView = view.photoImage;
-        imageView.setSize(1080, 1120);
-        imageView.setTag(mPageNumber);
-        view.setTag(mPageNumber);
-        boolean showing = false;
-        imageView.setOrientation(0, true);
-        if (photoEntry != null) {
-            if (photoEntry.thumbPath != null) {
-                imageView.setImage(photoEntry.thumbPath, null, getContext().getResources().getDrawable(R.drawable.nophotos));
-            } else if (photoEntry.path != null) {
-                imageView.setOrientation(photoEntry.orientation, true);
-                if (photoEntry.isVideo) {
-                    imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, getContext().getResources().getDrawable(R.drawable.nophotos));
-                } else {
-//                    imageView.setImage(photoEntry.path, null, getContext().getResources().getDrawable(R.drawable.nophotos));
-                    String path;
-                    if (photoEntry.imagePath != null) {
-                        path = photoEntry.imagePath;
-                    } else {
-                        path = photoEntry.path;
-                    }
-                    int size = (int) (AndroidUtilities.getPhotoSize() / AndroidUtilities.density);
-                    String filter = String.format(Locale.US, "%d_%d", size, size);
-                    imageView.setImage(path, filter, null, null, 0);
-                }
-            } else {
-                imageView.setImageResource(R.drawable.nophotos);
-            }
+        singleInstace.setParentActivity(getActivity());
+//        PhotoViewerList.getInstance().setImageIndex(position, false);
+//    } else {
+        arrayList.add(photoEntry);
+        if (view != null) {
+            singleInstace.setIsVisible(false);
+            singleInstace.openPhotoForSelect(arrayList, 0, 0, photoViewerProvider, getActivity(), view);
         }
-        imageView.getImageReceiver().setVisible(!showing, true);
+//        else
+//            PhotoViewerList.getInstance().openPhotoForSelect(arrayList, position, 0, ChatAttachView.this, baseFragment);
+
+//        BackupImageView imageView = view.photoImage;
+//        imageView.setSize(1080, 1120);
+//        imageView.setTag(mPageNumber);
+//        view.setTag(mPageNumber);
+//        boolean showing = false;
+//        imageView.setOrientation(0, true);
+//        if (photoEntry != null) {
+//            if (photoEntry.thumbPath != null) {
+//                imageView.setImage(photoEntry.thumbPath, null, getContext().getResources().getDrawable(R.drawable.nophotos));
+//            } else if (photoEntry.path != null) {
+//                imageView.setOrientation(photoEntry.orientation, true);
+//                if (photoEntry.isVideo) {
+//                    imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, getContext().getResources().getDrawable(R.drawable.nophotos));
+//                } else {
+////                    imageView.setImage(photoEntry.path, null, getContext().getResources().getDrawable(R.drawable.nophotos));
+//                    String path;
+//                    if (photoEntry.imagePath != null) {
+//                        path = photoEntry.imagePath;
+//                    } else {
+//                        path = photoEntry.path;
+//                    }
+//                    int size = (int) (AndroidUtilities.getPhotoSize() / AndroidUtilities.density);
+//                    String filter = String.format(Locale.US, "%d_%d", size, size);
+//                    imageView.setImage(path, filter, null, null, 0);
+//                }
+//            } else {
+//                imageView.setImageResource(R.drawable.nophotos);
+//            }
+//        }
+//        imageView.getImageReceiver().setVisible(!showing, true);
 //            cell.checkBox.setVisibility(View.GONE);
         return view;
     }
