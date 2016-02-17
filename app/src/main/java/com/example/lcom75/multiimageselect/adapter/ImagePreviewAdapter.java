@@ -24,16 +24,13 @@ import java.util.HashMap;
  */
 public class ImagePreviewAdapter extends FragmentStatePagerAdapter {
     private Context mContext;
-    //    private AndroidUtilities.AlbumEntry selectedAlbum;
-    int itemWidth;
     Integer[] selectedKey;
     HashMap<Integer, AndroidUtilities.PhotoEntry> selectedPhotos;
     LayoutInflater mLayoutInflater;
 
-    public ImagePreviewAdapter(android.support.v4.app.FragmentManager fm, Context context, int itemWidth, HashMap<Integer, AndroidUtilities.PhotoEntry> mSelectedPhotos) {
+    public ImagePreviewAdapter(android.support.v4.app.FragmentManager fm, Context context, HashMap<Integer, AndroidUtilities.PhotoEntry> mSelectedPhotos) {
         super(fm);
         mContext = context;
-        this.itemWidth = itemWidth;
         selectedPhotos = mSelectedPhotos;
         selectedKey = mSelectedPhotos.keySet().toArray(new Integer[mSelectedPhotos.size()]);
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

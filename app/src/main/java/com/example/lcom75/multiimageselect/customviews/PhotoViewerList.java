@@ -89,7 +89,7 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
     private TextView dateTextView;
     private MenuItem menuItem;
     private ImageView shareButton;
-    private BackgroundDrawable backgroundDrawable = new BackgroundDrawable(0xff000000);
+    private BackgroundDrawable backgroundDrawable = new BackgroundDrawable(0xffffffff);
     private CheckBox checkImageView;
     //    private View pickerView;
 //    private View editorDoneLayout;
@@ -2303,9 +2303,8 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
                 zooming = false;
             } else if (draggingDown) {
                 if (Math.abs(dragY - ev.getY()) > getContainerViewHeight() / 6.0f) {
-                    closePhoto(true, false);
+//                    closePhoto(true, false);
                 } else {
-
                     animateTo(1, 0, 0, false);
                 }
                 draggingDown = false;
@@ -2480,12 +2479,12 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
             }
         }
 
-        if (currentEditMode == 0 && scale == 1 && aty != -1 && !zoomAnimation) {
-            float maxValue = getContainerViewHeight() / 4.0f;
-            backgroundDrawable.setAlpha((int) Math.max(127, 255 * (1.0f - (Math.min(Math.abs(aty), maxValue) / maxValue))));
-        } else {
-            backgroundDrawable.setAlpha(255);
-        }
+//        if (currentEditMode == 0 && scale == 1 && aty != -1 && !zoomAnimation) {
+//            float maxValue = getContainerViewHeight() / 4.0f;
+//            backgroundDrawable.setAlpha((int) Math.max(127, 255 * (1.0f - (Math.min(Math.abs(aty), maxValue) / maxValue))));
+//        } else {
+//            backgroundDrawable.setAlpha(255);
+//        }
 
         ImageReceiver sideImage = null;
         if (currentEditMode == 0) {
@@ -2566,7 +2565,7 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
             int width = (int) (bitmapWidth * scale);
             int height = (int) (bitmapHeight * scale);
 
-            centerImage.setAlpha(alpha);
+//            centerImage.setAlpha(alpha);
             centerImage.setImageCoords(-width / 2, -height / 2, width, height);
             centerImage.draw(canvas);
             canvas.restore();

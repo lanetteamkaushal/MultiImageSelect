@@ -10,6 +10,7 @@ package com.example.lcom75.multiimageselect.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -26,6 +27,8 @@ public class PhotoAttachAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private PhotoAttachAdapterDelegate delegate;
     private HashMap<Integer, AndroidUtilities.PhotoEntry> selectedPhotos = new HashMap<>();
+    Integer[] selectedKey;
+    public String TAG = PhotoAttachAdapter.class.getSimpleName();
 
     public interface PhotoAttachAdapterDelegate {
         void selectedPhotosChanged();
@@ -38,8 +41,15 @@ public class PhotoAttachAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public PhotoAttachAdapter(Context context) {
+    public PhotoAttachAdapter(Context context, HashMap<Integer, AndroidUtilities.PhotoEntry> mSelectedPhotos) {
         mContext = context;
+        selectedPhotos = mSelectedPhotos;
+        selectedKey = mSelectedPhotos.keySet().toArray(new Integer[mSelectedPhotos.size()]);
+    }
+
+    public void replace(HashMap<Integer, AndroidUtilities.PhotoEntry> mSelectedPhotos) {
+        selectedPhotos = mSelectedPhotos;
+        selectedKey = mSelectedPhotos.keySet().toArray(new Integer[mSelectedPhotos.size()]);
     }
 
     public void clearSelectedPhotos() {
@@ -67,11 +77,15 @@ public class PhotoAttachAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         PhotoAttachPhotoCell cell = (PhotoAttachPhotoCell) holder.itemView;
-        AndroidUtilities.PhotoEntry photoEntry = AndroidUtilities.allPhotosAlbumEntry.photos.get(position);
-        cell.setPhotoEntry(photoEntry, position == AndroidUtilities.allPhotosAlbumEntry.photos.size() - 1);
-        cell.setChecked(selectedPhotos.containsKey(photoEntry.imageId), false);
-        cell.getImageView().setTag(position);
-        cell.setTag(position);
+        AndroidUtilities.PhotoEntry photoEntry = selectedPhotos.get(selectedKey[position]);
+        if (photoEntry != null) {
+            cell.setPhotoEntry(photoEntry, position == selectedPhotos.size() - 1);
+//        cell.setChecked(selectedPhotos.containsKey(photoEntry.imageId), false);
+            cell.getImageView().setTag(position);
+            cell.setTag(position);
+        } else {
+            Log.d(TAG, "Photo Entry null }:");
+        }
     }
 
     @Override
@@ -99,7 +113,7 @@ public class PhotoAttachAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return (AndroidUtilities.allPhotosAlbumEntry != null ? AndroidUtilities.allPhotosAlbumEntry.photos.size() : 0);
+        return (selectedPhotos != null ? selectedPhotos.size() : 0);
     }
 
     @Override

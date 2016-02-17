@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements PhotoViewer.Photo
         });
         flPreview = (ViewPager) findViewById(R.id.flPreview);
         selectedPhotos = ApplicationLoader.selectedPhotos;
-        flPreview.setAdapter(adapter = new ImagePreviewAdapter(getSupportFragmentManager(), this, 1180, selectedPhotos));
+        flPreview.setAdapter(adapter = new ImagePreviewAdapter(getSupportFragmentManager(), this, selectedPhotos));
         frameLayout = (FrameLayout) findViewById(R.id.chatAttachView);
         chatAttachView = new ChatAttachView(this);
         chatAttachView.init(this);
@@ -62,19 +62,13 @@ public class MainActivity extends AppCompatActivity implements PhotoViewer.Photo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -85,10 +79,13 @@ public class MainActivity extends AppCompatActivity implements PhotoViewer.Photo
     protected void onResume() {
         super.onResume();
         try {
+            selectedPhotos = ApplicationLoader.selectedPhotos;
             if (adapter != null) {
-                selectedPhotos = ApplicationLoader.selectedPhotos;
                 adapter.replace(selectedPhotos);
                 adapter.notifyDataSetChanged();
+            }
+            if (chatAttachView != null) {
+                chatAttachView.replace(selectedPhotos);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,19 +93,9 @@ public class MainActivity extends AppCompatActivity implements PhotoViewer.Photo
     }
 
     private PhotoPreviewCell getCellForIndex(int index) {
-        int count = 1;//attachPhotoRecyclerView.getChildCount();
-//        for (int a = 0; a < count; a++) {
-            View view = ((ImagePreviewFragment) adapter.instantiateItem(flPreview,flPreview.getCurrentItem())).getView();
-            if (view instanceof PhotoPreviewCell) {
-                PhotoPreviewCell cell = (PhotoPreviewCell) view;
-//                int num = (Integer) cell.getImageView().getTag();
-//                if (num < 0 || num >= AndroidUtilities.allPhotosAlbumEntry.photos.size()) {
-//                    continue;
-//                }
-//                if (num == index) {
-                    return cell;
-//                }
-//            }
+        View view = ((ImagePreviewFragment) adapter.instantiateItem(flPreview, flPreview.getCurrentItem())).getView();
+        if (view instanceof PhotoPreviewCell) {
+            return (PhotoPreviewCell) view;
         }
         return null;
     }
@@ -132,10 +119,7 @@ public class MainActivity extends AppCompatActivity implements PhotoViewer.Photo
 
     @Override
     public void willSwitchFromPhoto(Object messageObject, TLRPC.FileLocation fileLocation, int index) {
-        PhotoPreviewCell cell = getCellForIndex(index);
-//        if (cell != null) {
-//            cell.getCheckBox().setVisibility(View.VISIBLE);
-//        }
+
     }
 
     @Override
@@ -152,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements PhotoViewer.Photo
             object.thumb = object.imageReceiver.getBitmap();
             object.scale = ViewProxy.getScaleX(cell.getImageView());
             object.clipBottomAddition = (Build.VERSION.SDK_INT >= 21 ? 0 : -AndroidUtilities.statusBarHeight);
-//            cell.getCheckBox().setVisibility(View.GONE);
             return object;
         }
         return null;
@@ -169,21 +152,11 @@ public class MainActivity extends AppCompatActivity implements PhotoViewer.Photo
 
     @Override
     public void willHidePhotoViewer() {
-//        int count = attachPhotoRecyclerView.getChildCount();
-//        for (int a = 0; a < count; a++) {
-//            View view = attachPhotoRecyclerView.getChildAt(a);
-//            if (view instanceof PhotoAttachPhotoCell) {
-//                PhotoAttachPhotoCell cell = (PhotoAttachPhotoCell) view;
-//                if (cell.getCheckBox().getVisibility() != View.VISIBLE) {
-//                    cell.getCheckBox().setVisibility(View.VISIBLE);
-//                }
-//            }
-//        }
     }
 
     @Override
     public boolean isPhotoChecked(int index) {
-        return false;//!(index < 0 || index >= AndroidUtilities.allPhotosAlbumEntry.photos.size()) && photoAttachAdapter.getSelectedPhotos().containsKey(AndroidUtilities.allPhotosAlbumEntry.photos.get(index).imageId);
+        return false;
     }
 
     @Override
