@@ -18,8 +18,6 @@ package com.example.lcom75.multiimageselect.volley;
 
 import android.net.TrafficStats;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 
 import java.io.UnsupportedEncodingException;

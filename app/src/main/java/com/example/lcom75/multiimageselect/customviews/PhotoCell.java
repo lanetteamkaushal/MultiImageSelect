@@ -15,13 +15,17 @@ import com.example.lcom75.multiimageselect.R;
 /**
  * Created by lcom75 on 15/2/16.
  */
-public class PhotoCell extends FrameLayout implements Checkable {
+public class PhotoCell extends FrameLayout {
+
     private BackupImageView imageView;
-    private FrameLayout checkFrame;
+    private boolean noCheckBox = false;
     private boolean isLast;
     private boolean pressed;
     private static Rect rect = new Rect();
     private PhotoAttachPhotoCellDelegate delegate;
+    private boolean attachedToWindow;
+    private boolean isChecked;
+    private float progress = 0f;
     public View checkedView;
 
     public PhotoCell(Context context, boolean NeedCheckBox) {
@@ -31,23 +35,7 @@ public class PhotoCell extends FrameLayout implements Checkable {
         checkedView = new View(context);
         addView(checkedView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         checkedView.setBackgroundColor(context.getResources().getColor(R.color.checkedColor));
-        checkFrame = new FrameLayout(context);
-        addView(checkFrame, LayoutHelper.createFrame(42, 42, Gravity.LEFT | Gravity.TOP, 38, 0, 0, 0));
-    }
-
-    @Override
-    public void setChecked(boolean checked) {
-
-    }
-
-    @Override
-    public boolean isChecked() {
-        return false;
-    }
-
-    @Override
-    public void toggle() {
-
+        checkedView.setVisibility(View.GONE);
     }
 
     public interface PhotoAttachPhotoCellDelegate {
@@ -73,6 +61,7 @@ public class PhotoCell extends FrameLayout implements Checkable {
         return imageView;
     }
 
+
     public void setPhotoEntry(AndroidUtilities.PhotoEntry entry, boolean last) {
         pressed = false;
         photoEntry = entry;
@@ -86,54 +75,37 @@ public class PhotoCell extends FrameLayout implements Checkable {
             imageView.setImageResource(R.drawable.nophotos);
         }
         boolean showing = PhotoViewer.getInstance().isShowingImage(photoEntry.path);
+        if (noCheckBox) showing = true;
         imageView.getImageReceiver().setVisible(!showing, true);
         requestLayout();
     }
 
-    public void setOnCheckClickLisnener(OnClickListener onCheckClickLisnener) {
-        checkFrame.setOnClickListener(onCheckClickLisnener);
-    }
+//    public void setChecked(boolean value, boolean animated) {
+//        checkBox.setChecked(value, animated);
+//    }
 
     public void setDelegate(PhotoAttachPhotoCellDelegate delegate) {
         this.delegate = delegate;
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        boolean result = false;
-
-        checkFrame.getHitRect(rect);
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (rect.contains((int) event.getX(), (int) event.getY())) {
-                pressed = true;
-                invalidate();
-                result = true;
-            }
-        } else if (pressed) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                getParent().requestDisallowInterceptTouchEvent(true);
-                pressed = false;
-                playSoundEffect(SoundEffectConstants.CLICK);
-                delegate.onCheckClick(this);
-                invalidate();
-            } else if (event.getAction() == MotionEvent.ACTION_CANCEL) {
-                pressed = false;
-                invalidate();
-            } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                if (!(rect.contains((int) event.getX(), (int) event.getY()))) {
-                    pressed = false;
-                    invalidate();
-                }
-            }
+    public void setChecked(boolean checked, boolean animated) {
+        if (checked == isChecked) {
+            return;
         }
-        if (!result) {
-            result = super.onTouchEvent(event);
-        }
+        isChecked = checked;
+        checkedView.setVisibility(checked ? VISIBLE : GONE);
+//        if (attachedToWindow && animated) {
+//        } else {
+//            setProgress(checked ? 1.0f : 0.0f);
+//        }
+//    }
+//
+//    public void setProgress(float value) {
+//        if (progress == value) {
+//            return;
+//        }
+//        progress = value;
+//        invalidate();
+    }
 
-        return result;
-    }
-    public void setChecked(boolean value, boolean animated) {
-        setChecked(value);
-        checkedView.setVisibility(value ? VISIBLE : GONE);
-    }
 }

@@ -11,12 +11,12 @@ package com.example.lcom75.multiimageselect.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
 
 
 import com.example.lcom75.multiimageselect.AndroidUtilities;
-import com.example.lcom75.multiimageselect.MediaController;
 import com.example.lcom75.multiimageselect.customviews.PhotoAttachPhotoCell;
 import com.example.lcom75.multiimageselect.customviews.PhotoCell;
 
@@ -29,6 +29,12 @@ public class PhotoAttachAdapter extends RecyclerView.Adapter {
     private HashMap<Integer, AndroidUtilities.PhotoEntry> selectedPhotos = new HashMap<>();
     Integer[] selectedKey;
     public String TAG = PhotoAttachAdapter.class.getSimpleName();
+    private int selectedItem = 0;
+
+    public void setSelectedItem(int selectedItem) {
+        this.selectedItem = selectedItem;
+    }
+
 
     public interface PhotoAttachAdapterDelegate {
         void selectedPhotosChanged();
@@ -76,11 +82,14 @@ public class PhotoAttachAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        PhotoAttachPhotoCell cell = (PhotoAttachPhotoCell) holder.itemView;
+        PhotoCell cell = (PhotoCell) holder.itemView;
         AndroidUtilities.PhotoEntry photoEntry = selectedPhotos.get(selectedKey[position]);
         if (photoEntry != null) {
             cell.setPhotoEntry(photoEntry, position == selectedPhotos.size() - 1);
-//        cell.setChecked(selectedPhotos.containsKey(photoEntry.imageId), false);
+            if (position == selectedItem)
+                cell.setChecked(true, false);
+            else
+                cell.setChecked(false, false);
             cell.getImageView().setTag(position);
             cell.setTag(position);
         } else {
@@ -90,10 +99,10 @@ public class PhotoAttachAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        PhotoAttachPhotoCell cell = new PhotoAttachPhotoCell(mContext, false);
-        cell.setDelegate(new PhotoAttachPhotoCell.PhotoAttachPhotoCellDelegate() {
+        PhotoCell cell = new PhotoCell(mContext, false);
+        cell.setDelegate(new PhotoCell.PhotoAttachPhotoCellDelegate() {
             @Override
-            public void onCheckClick(PhotoAttachPhotoCell v) {
+            public void onCheckClick(PhotoCell v) {
                 AndroidUtilities.PhotoEntry photoEntry = v.getPhotoEntry();
                 if (selectedPhotos.containsKey(photoEntry.imageId)) {
                     selectedPhotos.remove(photoEntry.imageId);

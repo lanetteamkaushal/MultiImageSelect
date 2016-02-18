@@ -25,7 +25,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -35,7 +34,6 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.Surface;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +48,6 @@ import com.example.lcom75.multiimageselect.AndroidUtilities;
 import com.example.lcom75.multiimageselect.ApplicationLoader;
 import com.example.lcom75.multiimageselect.MainActivity;
 import com.example.lcom75.multiimageselect.NotificationCenter;
-import com.example.lcom75.multiimageselect.R;
 import com.example.lcom75.multiimageselect.Utilities;
 import com.example.lcom75.multiimageselect.tgnet.ConnectionsManager;
 import com.example.lcom75.multiimageselect.tgnet.TLRPC;
@@ -74,7 +71,6 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
 
     private Activity parentActivity;
 
-    private ActionBar actionBar;
     private boolean isActionBarVisible = true;
 
     private static Drawable[] progressDrawables;
@@ -90,9 +86,11 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
     private MenuItem menuItem;
     private ImageView shareButton;
     private BackgroundDrawable backgroundDrawable = new BackgroundDrawable(0xffffffff);
-    private CheckBox checkImageView;
+    //    private CheckBox checkImageView;
     //    private View pickerView;
-//    private View editorDoneLayout;
+    private PickerBottomLayout editorDoneLayout;
+    private PickerBottomLayout pickerView;
+
     private RadialProgressView radialProgressViews[] = new RadialProgressView[3];
     private MenuItem cropItem;
     private MenuItem tuneItem;
@@ -125,6 +123,10 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
     private boolean disableShowCheck = false;
 
     private String lastTitle;
+
+    public int getCurrentEditMode() {
+        return currentEditMode;
+    }
 
     private int currentEditMode;
 
@@ -429,6 +431,11 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
                 if (child.getVisibility() == GONE) {
                     continue;
                 }
+//                if (captionEditText.isPopupView(child)) {
+                child.measure(MeasureSpec.makeMeasureSpec(widthSize, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(child.getLayoutParams().height, MeasureSpec.EXACTLY));
+//                } else {
+//                    measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
+//                }
             }
         }
 
@@ -495,11 +502,13 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
 //                    if (!captionEditText.isPopupShowing() && !captionEditText.isKeyboardVisible() && captionEditText.getEmojiPadding() == 0) {
 //                        childTop += AndroidUtilities.dp(400);
 //                    }
-//                } else if (child == pickerView || child == captionTextViewNew || child == captionTextViewOld) {
+//                } else
+                if (child == pickerView || child == captionTextViewNew || child == captionTextViewOld) {
 //                    if (captionEditText.isPopupShowing() || captionEditText.isKeyboardVisible()) {
-//                        childTop += AndroidUtilities.dp(400);
+                    childTop += AndroidUtilities.dp(400);
 //                    }
-//                } else if (captionEditText.isPopupView(child)) {
+                }
+//                else if (captionEditText.isPopupView(child)) {
 //                    childTop = captionEditText.getBottom();
 //                }
                 child.layout(childLeft, childTop, childLeft + width, childTop + height);
@@ -689,12 +698,12 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
         fwindowLayoutParams.gravity = Gravity.TOP;
 
         bottomLayout = new FrameLayout(parentActivity);
-        bottomLayout.setBackgroundColor(0x7f000000);
+        bottomLayout.setBackgroundColor(0x7fff0000);
         containerView.addView(bottomLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.BOTTOM | Gravity.LEFT));
 
         captionTextViewOld = new TextView(parentActivity);
         captionTextViewOld.setMaxLines(10);
-        captionTextViewOld.setBackgroundColor(0x7f000000);
+        captionTextViewOld.setBackgroundColor(0x7f0000ff);
         captionTextViewOld.setPadding(AndroidUtilities.dp(16), AndroidUtilities.dp(8), AndroidUtilities.dp(16), AndroidUtilities.dp(8));
         captionTextViewOld.setLinkTextColor(0xffffffff);
         captionTextViewOld.setTextColor(0xffffffff);
@@ -705,7 +714,7 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
 
         captionTextView = captionTextViewNew = new TextView(parentActivity);
         captionTextViewNew.setMaxLines(10);
-        captionTextViewNew.setBackgroundColor(0x7f000000);
+        captionTextViewNew.setBackgroundColor(0x7f00ff00);
         captionTextViewNew.setPadding(AndroidUtilities.dp(16), AndroidUtilities.dp(8), AndroidUtilities.dp(16), AndroidUtilities.dp(8));
         captionTextViewNew.setLinkTextColor(0xffffffff);
         captionTextViewNew.setTextColor(0xffffffff);
@@ -743,6 +752,55 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
         dateTextView.setGravity(Gravity.LEFT);
         bottomLayout.addView(dateTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 16, 25, 50, 0));
 
+        pickerView = new PickerBottomLayout(parentActivity);
+        pickerView.setBackgroundColor(0x7faaff00);
+        containerView.addView(pickerView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.BOTTOM | Gravity.LEFT));
+        pickerView.cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (placeProvider != null) {
+                    closePhoto(!placeProvider.cancelButtonPressed(), false);
+                }
+            }
+        });
+        pickerView.doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (placeProvider != null) {
+                    placeProvider.sendButtonPressed(currentIndex);
+                    closePhoto(false, false);
+                }
+            }
+        });
+
+        editorDoneLayout = new PickerBottomLayout(parentActivity);
+        editorDoneLayout.setBackgroundColor(0x7f0000ea);
+        editorDoneLayout.updateSelectedCount(0, false);
+        editorDoneLayout.setVisibility(View.GONE);
+        containerView.addView(editorDoneLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM));
+        editorDoneLayout.cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentEditMode == 1) {
+                    photoCropView.cancelAnimationRunnable();
+                }
+                switchToEditMode(0);
+            }
+        });
+        editorDoneLayout.doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentEditMode == 1) {
+                    photoCropView.cancelAnimationRunnable();
+                    if (imageMoveAnimation != null) {
+                        return;
+                    }
+                }
+                applyCurrentEditMode();
+                switchToEditMode(0);
+            }
+        });
+
         gestureDetector = new GestureDetector(containerView.getContext(), this);
         gestureDetector.setOnDoubleTapListener(this);
 
@@ -758,27 +816,110 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
 
         WindowManager manager = (WindowManager) ApplicationLoader.applicationContext.getSystemService(Activity.WINDOW_SERVICE);
         int rotation = manager.getDefaultDisplay().getRotation();
-
-        checkImageView = new CheckBox(containerView.getContext(), R.drawable.nophotos);
-        checkImageView.setDrawBackground(true);
-        checkImageView.setSize(45);
-        checkImageView.setCheckOffset(AndroidUtilities.dp(1));
-        checkImageView.setColor(0xff3ccaef);
-        checkImageView.setVisibility(View.GONE);
-        containerView.addView(checkImageView, LayoutHelper.createFrame(45, 45, Gravity.RIGHT | Gravity.TOP, 0, rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_90 ? 58 : 68, 10, 0));
-        checkImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (placeProvider != null) {
-                    placeProvider.setPhotoChecked(currentIndex);
-                    checkImageView.setChecked(placeProvider.isPhotoChecked(currentIndex), true);
-                    updateSelectedCount();
-                }
-            }
-        });
     }
 
-    private void switchToEditMode(final int mode) {
+    public void applyCurrentEditMode() {
+        Bitmap bitmap = null;
+        if (currentEditMode == 1) {
+            bitmap = photoCropView.getBitmap();
+        }
+        if (bitmap != null) {
+            TLRPC.PhotoSize size = ImageLoader.scaleAndSaveImage(bitmap, AndroidUtilities.getPhotoSize(), AndroidUtilities.getPhotoSize(), 80, false, 101, 101);
+            if (size != null) {
+                Object object = imagesArrLocals.get(currentIndex);
+                if (object instanceof AndroidUtilities.PhotoEntry) {
+                    AndroidUtilities.PhotoEntry entry = (AndroidUtilities.PhotoEntry) object;
+                    entry.imagePath = FileLoader.getPathToAttach(size, true).toString();
+                    size = ImageLoader.scaleAndSaveImage(bitmap, AndroidUtilities.dp(120), AndroidUtilities.dp(120), 70, false, 101, 101);
+                    if (size != null) {
+                        entry.thumbPath = FileLoader.getPathToAttach(size, true).toString();
+                    }
+                } else if (object instanceof AndroidUtilities.SearchImage) {
+                    AndroidUtilities.SearchImage entry = (AndroidUtilities.SearchImage) object;
+                    entry.imagePath = FileLoader.getPathToAttach(size, true).toString();
+                    size = ImageLoader.scaleAndSaveImage(bitmap, AndroidUtilities.dp(120), AndroidUtilities.dp(120), 70, false, 101, 101);
+                    if (size != null) {
+                        entry.thumbPath = FileLoader.getPathToAttach(size, true).toString();
+                    }
+                }
+                if (sendPhotoType == 0 && placeProvider != null) {
+                    placeProvider.updatePhotoAtIndex(currentIndex);
+                    if (!placeProvider.isPhotoChecked(currentIndex)) {
+                        placeProvider.setPhotoChecked(currentIndex);
+                        updateSelectedCount();
+                    }
+                }
+                if (currentEditMode == 1) {
+                    float scaleX = photoCropView.getRectSizeX() / (float) getContainerViewWidth();
+                    float scaleY = photoCropView.getRectSizeY() / (float) getContainerViewHeight();
+                    scale = scaleX > scaleY ? scaleX : scaleY;
+                    translationX = photoCropView.getRectX() + photoCropView.getRectSizeX() / 2 - getContainerViewWidth() / 2;
+                    translationY = photoCropView.getRectY() + photoCropView.getRectSizeY() / 2 - getContainerViewHeight() / 2;
+                    zoomAnimation = true;
+                }
+                centerImage.setParentView(null);
+                centerImage.setOrientation(0, true);
+                centerImage.setImageBitmap(bitmap);
+                centerImage.setParentView(containerView);
+            }
+        }
+    }
+
+    public void applyCurrentEditMode(Bitmap mBitmap) {
+        Bitmap bitmap = mBitmap;
+//        currentEditMode = 1;
+        if (bitmap == null) {
+            return;
+        }
+        if (bitmap != null) {
+            TLRPC.PhotoSize size = ImageLoader.scaleAndSaveImage(bitmap, AndroidUtilities.getPhotoSize(), AndroidUtilities.getPhotoSize(), 80, false, 101, 101);
+            if (size != null) {
+                Object object = imagesArrLocals.get(currentIndex);
+                if (object instanceof AndroidUtilities.PhotoEntry) {
+                    AndroidUtilities.PhotoEntry entry = (AndroidUtilities.PhotoEntry) object;
+                    entry.imagePath = FileLoader.getPathToAttach(size, true).toString();
+                    size = ImageLoader.scaleAndSaveImage(bitmap, AndroidUtilities.dp(120), AndroidUtilities.dp(120), 70, false, 101, 101);
+                    if (size != null) {
+                        entry.thumbPath = FileLoader.getPathToAttach(size, true).toString();
+                    }
+                } else if (object instanceof AndroidUtilities.SearchImage) {
+                    AndroidUtilities.SearchImage entry = (AndroidUtilities.SearchImage) object;
+                    entry.imagePath = FileLoader.getPathToAttach(size, true).toString();
+                    size = ImageLoader.scaleAndSaveImage(bitmap, AndroidUtilities.dp(120), AndroidUtilities.dp(120), 70, false, 101, 101);
+                    if (size != null) {
+                        entry.thumbPath = FileLoader.getPathToAttach(size, true).toString();
+                    }
+                }
+                if (sendPhotoType == 0 && placeProvider != null) {
+                    placeProvider.updatePhotoAtIndex(currentIndex);
+                    if (!placeProvider.isPhotoChecked(currentIndex)) {
+                        placeProvider.setPhotoChecked(currentIndex);
+//                        checkImageView.setChecked(placeProvider.isPhotoChecked(currentIndex), true);
+                        updateSelectedCount();
+                    }
+                }
+                if (currentEditMode == 1) {
+                    float scaleX = photoCropView.getRectSizeX() / (float) getContainerViewWidth();
+                    float scaleY = photoCropView.getRectSizeY() / (float) getContainerViewHeight();
+                    scale = scaleX > scaleY ? scaleX : scaleY;
+                    translationX = photoCropView.getRectX() + photoCropView.getRectSizeX() / 2 - getContainerViewWidth() / 2;
+                    translationY = photoCropView.getRectY() + photoCropView.getRectSizeY() / 2 - getContainerViewHeight() / 2;
+                    zoomAnimation = true;
+                }
+                centerImage.setParentView(null);
+                centerImage.setOrientation(0, true);
+                centerImage.setImageBitmap(bitmap);
+                centerImage.setParentView(containerView);
+                if(containerView!=null){
+                    containerView.invalidate();
+                }
+            }
+        }
+//        currentEditMode = 0;
+    }
+
+
+    public void switchToEditMode(final int mode) {
         if (currentEditMode == mode || centerImage.getBitmap() == null || changeModeAnimation != null || imageMoveAnimation != null || radialProgressViews[0].backgroundState != -1) {
             return;
         }
@@ -836,12 +977,12 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
 
                     AnimatorSet animatorSet = new AnimatorSet();
                     ArrayList<Animator> arrayList = new ArrayList<>();
-                    arrayList.add(ObjectAnimator.ofFloat(actionBar, "translationY", 0));
+
                     if (needCaptionLayout) {
                         arrayList.add(ObjectAnimator.ofFloat(captionTextView, "translationY", 0));
                     }
                     if (sendPhotoType == 0) {
-                        arrayList.add(ObjectAnimator.ofFloat(checkImageView, "alpha", 1));
+
                     }
                     animatorSet.playTogether(arrayList);
                     animatorSet.setDuration(200);
@@ -852,7 +993,7 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
                                 captionTextView.setVisibility(captionTextView.getTag() != null ? View.VISIBLE : View.INVISIBLE);
                             }
                             if (sendPhotoType == 0) {
-                                checkImageView.setVisibility(View.VISIBLE);
+
                             }
                         }
 
@@ -862,7 +1003,7 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
                                 captionTextView.clearAnimation();
                             }
                             if (sendPhotoType == 0) {
-                                checkImageView.clearAnimation();
+
                             }
                         }
                     });
@@ -890,14 +1031,16 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
                 });
             }
 
+            editorDoneLayout.doneButtonTextView.setText("Crop");
             changeModeAnimation = new AnimatorSet();
             ArrayList<Animator> arrayList = new ArrayList<>();
-            arrayList.add(ObjectAnimator.ofFloat(actionBar, "translationY", 0, -actionBar.getHeight()));
+            arrayList.add(ObjectAnimator.ofFloat(pickerView, "translationY", 0, AndroidUtilities.dp(96)));
+//            arrayList.add(ObjectAnimator.ofFloat(actionBar, "translationY", 0, -actionBar.getHeight()));
             if (needCaptionLayout) {
                 arrayList.add(ObjectAnimator.ofFloat(captionTextView, "translationY", 0, AndroidUtilities.dp(96)));
             }
             if (sendPhotoType == 0) {
-                arrayList.add(ObjectAnimator.ofFloat(checkImageView, "alpha", 1, 0));
+
             }
             changeModeAnimation.playTogether(arrayList);
             changeModeAnimation.setDuration(200);
@@ -905,13 +1048,16 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     changeModeAnimation = null;
+                    pickerView.clearAnimation();
+//                    actionBar.clearAnimation();
+                    pickerView.setVisibility(View.GONE);
+//                    actionBar.setVisibility(View.GONE);
                     if (needCaptionLayout) {
                         captionTextView.clearAnimation();
                         captionTextView.setVisibility(View.INVISIBLE);
                     }
                     if (sendPhotoType == 0) {
-                        checkImageView.clearAnimation();
-                        checkImageView.setVisibility(View.GONE);
+
                     }
 
                     Bitmap bitmap = centerImage.getBitmap();
@@ -936,6 +1082,7 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
 
                     imageMoveAnimation = new AnimatorSet();
                     imageMoveAnimation.playTogether(
+                            ObjectAnimator.ofFloat(editorDoneLayout, "translationY", AndroidUtilities.dp(48), 0),
                             ObjectAnimator.ofFloat(PhotoViewerList.this, "animationValue", 0, 1),
                             ObjectAnimator.ofFloat(photoCropView, "alpha", 0, 1)
                     );
@@ -943,6 +1090,7 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
                     imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationStart(Animator animation) {
+                            editorDoneLayout.setVisibility(View.VISIBLE);
                             photoCropView.setVisibility(View.VISIBLE);
                         }
 
@@ -956,6 +1104,7 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
                             scale = 1;
                             updateMinMax(scale);
                             containerView.invalidate();
+                            editorDoneLayout.clearAnimation();
                             photoCropView.clearAnimation();
                         }
                     });
@@ -980,7 +1129,7 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
         bottomLayout.setEnabled(show);
         if (animated) {
             ArrayList<Animator> arrayList = new ArrayList<>();
-            arrayList.add(ObjectAnimator.ofFloat(actionBar, "alpha", show ? 1.0f : 0.0f));
+//            arrayList.add(ObjectAnimator.ofFloat(actionBar, "alpha", show ? 1.0f : 0.0f));
             arrayList.add(ObjectAnimator.ofFloat(bottomLayout, "alpha", show ? 1.0f : 0.0f));
             if (captionTextView.getTag() != null) {
                 arrayList.add(ObjectAnimator.ofFloat(captionTextView, "alpha", show ? 1.0f : 0.0f));
@@ -1101,9 +1250,14 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
         currentThumb = object != null ? object.thumb : null;
         bottomLayout.setVisibility(View.VISIBLE);
         shareButton.setVisibility(View.GONE);
-        ViewProxy.setAlpha(checkImageView, 1.0f);
-        checkImageView.clearAnimation();
-        checkImageView.setVisibility(View.GONE);
+//        ViewProxy.setAlpha(checkImageView, 1.0f);
+        ViewProxy.setAlpha(pickerView, 1.0f);
+//        checkImageView.clearAnimation();
+        pickerView.clearAnimation();
+        editorDoneLayout.clearAnimation();
+//        checkImageView.setVisibility(View.GONE);
+        pickerView.setVisibility(View.GONE);
+        editorDoneLayout.setVisibility(View.GONE);
         captionTextView.setTag(null);
         captionTextView.clearAnimation();
         captionTextView.setVisibility(View.INVISIBLE);
@@ -1124,7 +1278,7 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
 
         if (photos != null) {
             if (sendPhotoType == 0) {
-                checkImageView.setVisibility(View.VISIBLE);
+//                checkImageView.setVisibility(View.VISIBLE);
             }
             imagesArrLocals.addAll(photos);
             setImageIndex(index, true);
@@ -1581,18 +1735,13 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
 //            fwindowLayoutParams.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED;
             windowView.setFocusable(false);
             containerView.setFocusable(false);
-            if (windowView.getParent() == null)
-            {
+            if (windowView.getParent() == null) {
                 Log.d("tmessages", "No parent found");
                 parentToAdd.addView(windowView, fwindowLayoutParams);
-            }
-            else if (!windowView.getParent().getClass().getSimpleName().equals(parentToAdd.getClass().getSimpleName()))
-            {
+            } else if (!windowView.getParent().getClass().getSimpleName().equals(parentToAdd.getClass().getSimpleName())) {
                 Log.d("tmessages", "Parents doesn't match");
                 parentToAdd.addView(windowView, fwindowLayoutParams);
-            }
-            else
-            {
+            } else {
                 Log.d("tmessages", "Already in same parent :");
             }
         } catch (Exception e) {
@@ -1806,7 +1955,7 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
                 containerView.removeView(photoFilterView);
                 photoFilterView = null;
             } else if (currentEditMode == 1) {
-//                editorDoneLayout.setVisibility(View.GONE);
+                editorDoneLayout.setVisibility(View.GONE);
                 photoCropView.setVisibility(View.GONE);
             }
             currentEditMode = 0;
@@ -2220,11 +2369,10 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
                     dragY = ev.getY();
                     if (isActionBarVisible && canShowBottom) {
                         toggleActionBar(false, true);
-                    }
-//                    else if (pickerView.getVisibility() == View.VISIBLE) {
-//                        toggleActionBar(false, true);
+                    } else if (pickerView.getVisibility() == View.VISIBLE) {
+                        toggleActionBar(false, true);
 //                        toggleCheckImageView(false);
-//                    }
+                    }
                     return true;
                 } else if (draggingDown) {
                     translationY = ev.getY() - dragY;
@@ -2615,18 +2763,18 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
             translationY = 0;
             updateMinMax(scale);
 
-            if (checkImageView != null) {
-                checkImageView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) checkImageView.getLayoutParams();
-                        WindowManager manager = (WindowManager) ApplicationLoader.applicationContext.getSystemService(Activity.WINDOW_SERVICE);
-                        int rotation = manager.getDefaultDisplay().getRotation();
-                        layoutParams.topMargin = AndroidUtilities.dp(rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_90 ? 58 : 68);
-                        checkImageView.setLayoutParams(layoutParams);
-                    }
-                });
-            }
+//            if (checkImageView != null) {
+//                checkImageView.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) checkImageView.getLayoutParams();
+//                        WindowManager manager = (WindowManager) ApplicationLoader.applicationContext.getSystemService(Activity.WINDOW_SERVICE);
+//                        int rotation = manager.getDefaultDisplay().getRotation();
+//                        layoutParams.topMargin = AndroidUtilities.dp(rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_90 ? 58 : 68);
+//                        checkImageView.setLayoutParams(layoutParams);
+//                    }
+//                });
+//            }
         }
     }
 
@@ -2691,7 +2839,7 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
             }
             toggleActionBar(!isActionBarVisible, true);
         } else if (sendPhotoType == 0) {
-            checkImageView.performClick();
+//            checkImageView.performClick();
         }
         return true;
     }

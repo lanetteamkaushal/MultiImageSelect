@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.lcom75.multiimageselect.AndroidUtilities;
-import com.example.lcom75.multiimageselect.R;
 
 public class PhotoPickerSearchCell extends LinearLayout {
 

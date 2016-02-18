@@ -4,6 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  *
  * Copyright Nikolai Kudashov, 2013-2016.
+ *
  */
 
 package com.example.lcom75.multiimageselect.customviews;
@@ -19,7 +20,10 @@ import android.widget.FrameLayout;
 import com.example.lcom75.multiimageselect.AndroidUtilities;
 import com.example.lcom75.multiimageselect.R;
 
-
+/***
+ * Do Not change This class. It is used in
+ * Image Preview Fragment.
+ */
 public class PhotoPreviewCell extends FrameLayout {
 
     public PreviewBIV photoImage;

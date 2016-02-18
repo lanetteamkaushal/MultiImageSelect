@@ -3,6 +3,8 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_multi_image_picker">MultiImagePicker</string>
     <string name="title_activity_photo_picker">PhotoPickerActivity</string>
+    <string name="cancel">Cancel</string>
+    <string name="send">Send</string>
     <plurals name="selected_images">
         <item quantity="one">%d Image Selected</item>
         <item quantity="other">%d Images Selected</item>

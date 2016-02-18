@@ -19,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.example.lcom75.multiimageselect.customviews.BackupImageView;
@@ -154,8 +153,9 @@ public class PhotoPickerActivity extends AppCompatActivity implements View.OnCli
                     if (i < 0 || i >= arrayList.size()) {
                         return;
                     }
-//                    PhotoViewer.getInstance().setParentActivity(PhotoPickerActivity.this);
-//                    PhotoViewer.getInstance().openPhotoForSelect(arrayList, i, singlePhoto ? 1 : 0, PhotoPickerActivity.this, PhotoPickerActivity.this);
+                    PhotoViewer.getInstance().setParentActivity(PhotoPickerActivity.this);
+                    PhotoViewer.getInstance().openPhotoForSelect(arrayList, i, singlePhoto ? 1 : 0, PhotoPickerActivity.this, PhotoPickerActivity.this);
+                    PhotoViewer.getInstance().switchToEditMode(1);
                 }
             }
         });
@@ -310,7 +310,7 @@ public class PhotoPickerActivity extends AppCompatActivity implements View.OnCli
                         imageView.setImageResource(R.drawable.nophotos);
                     }
                     cell.setChecked(selectedPhotos.containsKey(photoEntry.imageId), false);
-//                    showing = PhotoViewer.getInstance().isShowingImage(photoEntry.path);
+                    showing = PhotoViewer.getInstance().isShowingImage(photoEntry.path);
                 } else {
                     AndroidUtilities.SearchImage photoEntry;
                     if (searchResult.isEmpty() && lastSearchString == null) {
@@ -329,9 +329,9 @@ public class PhotoPickerActivity extends AppCompatActivity implements View.OnCli
                     }
                     cell.setChecked(selectedWebPhotos.containsKey(photoEntry.id), false);
                     if (photoEntry.document != null) {
-//                        showing = PhotoViewer.getInstance().isShowingImage(FileLoader.getPathToAttach(photoEntry.document, true).getAbsolutePath());
+                        showing = PhotoViewer.getInstance().isShowingImage(FileLoader.getPathToAttach(photoEntry.document, true).getAbsolutePath());
                     } else {
-//                        showing = PhotoViewer.getInstance().isShowingImage(photoEntry.imageUrl);
+                        showing = PhotoViewer.getInstance().isShowingImage(photoEntry.imageUrl);
                     }
                 }
                 imageView.getImageReceiver().setVisible(!showing, true);

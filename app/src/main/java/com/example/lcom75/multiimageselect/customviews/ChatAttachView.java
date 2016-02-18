@@ -15,7 +15,6 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,16 +31,17 @@ import com.example.lcom75.multiimageselect.ApplicationLoader;
 import com.example.lcom75.multiimageselect.NotificationCenter;
 import com.example.lcom75.multiimageselect.R;
 import com.example.lcom75.multiimageselect.adapter.PhotoAttachAdapter;
-import com.example.lcom75.multiimageselect.tgnet.TLRPC;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ChatAttachView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
-    private String TAG = ChatAttachView.class.getSimpleName();//}, PhotoViewer.PhotoViewerProvider {
+    private String TAG = ChatAttachView.class.getSimpleName();
 
     public interface ChatAttachViewDelegate {
         void didPressedButton(int button);
+
+        void didItemClicked(int position);
     }
 
     private LinearLayoutManager attachPhotoLayoutManager;
@@ -109,17 +109,13 @@ public class ChatAttachView extends FrameLayout implements NotificationCenter.No
                 if (baseFragment == null || baseFragment == null) {
                     return;
                 }
-                ArrayList<Object> arrayList = (ArrayList) AndroidUtilities.allPhotosAlbumEntry.photos;
-                if (position < 0 || position >= arrayList.size()) {
+                if (position < 0 || position >= mSelectedPhotos.size()) {
                     return;
                 }
-//                PhotoViewer.getInstance().setParentActivity(baseFragment);
-//                try {
-//                    PhotoViewer.getInstance().closePhoto(false, false);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                PhotoViewer.getInstance().openPhotoForSelect(arrayList, position, 0, ChatAttachView.this, baseFragment);
+                photoAttachAdapter.setSelectedItem(position);
+                photoAttachAdapter.notifyDataSetChanged();
+                if (delegate != null)
+                    delegate.didItemClicked(position);
             }
         });
 

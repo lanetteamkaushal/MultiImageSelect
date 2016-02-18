@@ -4,4 +4,127 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="checkedColor">#99667778</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue">#ff0079ff</color>
+    <color name="gray_edittext">#ff929292</color>
+    <color name="red">#ff929292</color>
+    <color name="dark_blue">#FF3387B0</color>
+    <color name="dark_blue_new">#803387B0</color>
+    <color name="status_bar_blue">#286A8A</color>
+    <color name="dark_blue_clicked">#403387B0</color>
+    <color name="blue_signup">#90557EAB</color>
+    <color name="white_signup">#90FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="ActionBarColorHover">#40FFFFFF</color>
+    <color name="background_tab_pressed">#FF33B5E5</color>
+    <color name="dialog_title">#ff33b5e5</color>
+    <color name="dialog_btn_off_white">#D6D6D6</color>
+    <color name="dialog_btn_light_gray">#C2C2C2</color>
+    <color name="off_white">#EBEBEB</color>
+    <color name="light_gray">#F3F3F3</color>
+    <color name="tabcolor">#D6DBE1</color>
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="background">#e5e5e5</color>
+    <color name="half_black">#808080</color>
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="pink">#e91e63</color>
+    <color name="pink_dark">#FF9B1B53</color>
+    //About us actionbar
+    <color name="pink_pressed">#ec407a</color>
+    <color name="pink_pressed_dark">#FF9B264E</color>
+    //managepasswd actionbar
+
+    <color name="blue_semi_transparent">#805677fc</color>
+    <color name="blue_semi_transparent_pressed">#80738ffe</color>
+    <color name="gray_seperator_line_on_settings">#B2B2B2</color>
+    <color name="Red_alert">#D0021B</color>
+    <color name="Red_alert_dark">#FF97021B</color>
+    <color name="Red_alert_scroll">#32d0021b</color>
+    <color name="seperator_settings">#D7D7d7</color>
+    <color name="contacts_header">#EAEAEA</color>
+    <color name="purple">#630FAD</color>
+    <color name="purple_dark">#FF3B0E87</color>
+    //Managemail header managenumber Qvite
+    <color name="purple_scroll">#323b0e87</color>
+    //Managemail header managenumber Qvite
+
+    <color name="green">#62A914</color>
+    <color name="green_dark">#FF447F14</color>
+    //Notification header Vote
+    <color name="green_scroll">#3262A914</color>
+    //Notification header Vote
+
+    <color name="purpule_fab_menu">#650FB0</color>
+    <color name="green_fab_menu">#63A913</color>
+    <color name="blue_fab_menu">#073E7F</color>
+    <color name="red_fab_menu">#B2071A</color>
+    <color name="darkred">#B2061B</color>
+    <color name="deepblue">#063E7F</color>
+    <color name="deepblue_dark">#FF062F5E</color>//mycircl
+    <color name="contacts_toast">#8E8E8E</color>
+    <color name="setting_background">#EFEFF4</color>
+    <color name="yellow">#D39819</color>
+    <color name="yellow_dark">#FF996819</color>
+    <color name="chat_other_user">#318DB8</color>
+    <color name="chat_me">#F5A623</color>
+    <color name="Setting_header">#FF3387B0</color>
+    <color name="Setting_header_dark">#FF2D729A</color>
+    <color name="Setting_background">#EEEEEE</color>
+    <color name="transparent">#00000000</color>
+    <color name="keyboard_background">#FFFFFFFF</color>
+    <color name="keyboard_key">#B9BEC0</color>
+    <color name="profile_pic_background">#414632</color>
+    <color name="card_shadow">#D9D9D9</color>
+    <color name="color_actionbar">#f8d444</color>
+    // Profile Detail
+    <color name="profile_bg">#F3F3F3</color>
+    <color name="profile_actionbar">#607D8B</color>
+    <color name="profile_statusbar">#37474f</color>
+    <color name="profile_image_bg">#D8D8D8</color>
+
+    //Manage Email
+    <color name="manage_email">#BF722D</color>
+    <color name="manage_email_statusbar">#ff8f4f22</color>
+    <color name="manage_email_scroll">#328f4f22</color>
+
+    //Manage Number
+    <color name="manage_number">#29C9AE</color>
+    <color name="manage_number_statusbar">#ff26977b</color>
+    <color name="manage_number_scroll">#3229c9ae</color>
+
+    //Manage Passwd
+    <color name="manage_passwd">#BFB72D</color>
+    <color name="manage_passwd_statusbar">#ff978f25</color>
+    <color name="manage_passwd_scroll">#32978f25</color>
+    //Notification
+    <color name="notification">#BF7A3C</color>
+    <color name="notification_dark">#ff975c33</color>
+    <color name="notification_scroll">#32bf7a3c</color>
+    <color name="privacy">#FF3387B0</color>
+    <color name="privacy_scroll">#323387B0</color>
+    <color name="privacy_dark">#286A8A</color>
+    <color name="connected_device">#FF3387B0</color>
+    <color name="connected_device_scroll">#323387B0</color>
+    <color name="connected_device_dark">#286A8A</color>
+    <color name="connection_status">#50E3C2</color>
+    <color name="scroll_bar">#323387B0</color>
+    <color name="imageColor">#D8D8D8</color>
+    <color name="blockstatus">#DADADA</color>
+
+    //contact details
+
+    <color name="status_message">#B3B3B3</color>
+    <color name="contact_detail_tablayout_below_line_color">#C3C3C3</color>
+    <color name="comments_listview_divider_color">#DBD7D6</color>
+    <color name="comment_time">#7D7C81</color>
+    <color name="album_by">#989898</color>
+    <color name="horizontal_line_color">#C4C4C4</color>
+    <color name="enter_comment">#BFC0C2</color>
+    <color name="status_message_background">#F7F7F7</color>
+    <color name="opacity_color">#33000000</color>
+    <color name="scroll_bar_thumb">#99C3D7</color>
+    <color name="rippelColor">#FFFFFF</color>
+    <color name="picker_background">#ff7c7c7c</color>
+    <color name="contact_header_bg">#eeeeee</color>
+    <color name="profile_back_color">#ffffff</color>
 </resources>

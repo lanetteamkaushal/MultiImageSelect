@@ -10,15 +10,10 @@ package com.example.lcom75.multiimageselect;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
-import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 

@@ -13,7 +13,60 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="@string/cancel" />
+
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:layout_toRightOf="@+id/tvCancel"
+                android:layout_toLeftOf="@+id/tvSend"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/ivRotate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_undo_black_24dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/ivUndo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_rotate_90_degrees_ccw_black_24dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/ivCrop"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_crop_black_24dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tvSend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="@string/send" />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
 
 
     <include layout="@layout/content_main" />

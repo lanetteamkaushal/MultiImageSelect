@@ -1,21 +1,11 @@
 package com.example.lcom75.multiimageselect.adapter;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.example.lcom75.multiimageselect.AndroidUtilities;
-import com.example.lcom75.multiimageselect.ApplicationLoader;
-import com.example.lcom75.multiimageselect.BaseFragmentAdapter;
-import com.example.lcom75.multiimageselect.R;
-import com.example.lcom75.multiimageselect.customviews.BackupImageView;
-import com.example.lcom75.multiimageselect.customviews.PhotoPickerPhotoCell;
 
 import java.util.HashMap;
 

@@ -1,7 +1,7 @@
 package com.example.lcom75.multiimageselect.adapter;
 
-import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,20 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.lcom75.multiimageselect.AndroidUtilities;
-import com.example.lcom75.multiimageselect.R;
-import com.example.lcom75.multiimageselect.customviews.BackupImageView;
-import com.example.lcom75.multiimageselect.customviews.PhotoPickerPhotoCell;
+import com.example.lcom75.multiimageselect.NotificationCenter;
 import com.example.lcom75.multiimageselect.customviews.PhotoPreviewCell;
 import com.example.lcom75.multiimageselect.customviews.PhotoViewer;
 import com.example.lcom75.multiimageselect.customviews.PhotoViewerList;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * Created by lcom75 on 16/2/16.
  */
-public class ImagePreviewFragment extends Fragment {
+public class ImagePreviewFragment extends Fragment implements NotificationCenter.NotificationCenterDelegate {
     /**
      * The argument key for the page number this fragment represents.
      */
@@ -126,6 +123,36 @@ public class ImagePreviewFragment extends Fragment {
      */
     public int getPageNumber() {
         return mPageNumber;
+    }
+
+    @Override
+    public void didReceivedNotification(int id, Object... args) {
+    }
+
+    public void startEditMode() {
+        if (singleInstace != null) {
+            if (singleInstace.getCurrentEditMode() == 1) {
+                singleInstace.applyCurrentEditMode();
+            } else {
+                singleInstace.switchToEditMode(1);
+            }
+        }
+    }
+
+    public void saveBitmap(Bitmap bitmap) {
+        if (singleInstace != null) {
+            singleInstace.applyCurrentEditMode(bitmap);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }
 

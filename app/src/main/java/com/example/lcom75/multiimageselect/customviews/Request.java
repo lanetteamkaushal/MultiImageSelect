@@ -18,8 +18,6 @@ package com.example.lcom75.multiimageselect.customviews;
 
 import android.net.TrafficStats;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 
 import com.example.lcom75.multiimageselect.volley.AuthFailureError;

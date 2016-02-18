@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.example.lcom75.multiimageselect.customviews.DispatchQueue;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigInteger;
@@ -260,6 +261,16 @@ public class Utilities {
 
     public static float lerp(float startValue, float endValue, float fraction) {
         return startValue + fraction * (endValue - startValue);
+    }
+
+    public static void closeSilently(Closeable c) {
+
+        if (c == null) return;
+        try {
+            c.close();
+        } catch (Throwable t) {
+            // do nothing
+        }
     }
 
 }
