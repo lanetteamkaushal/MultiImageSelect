@@ -2,6 +2,7 @@ package com.example.lcom75.multiimageselect.customviews;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 
@@ -9,7 +10,7 @@ import android.util.AttributeSet;
  * Created by lcom75 on 16/2/16.
  */
 public class PreviewBIV extends BackupImageView {
-    static Paint paint;
+
 
     public PreviewBIV(Context context) {
         super(context);
@@ -17,9 +18,6 @@ public class PreviewBIV extends BackupImageView {
     }
 
     private void initPaint(Context context) {
-        if (paint == null) {
-            paint = new Paint();
-        }
     }
 
     public PreviewBIV(Context context, AttributeSet attrs) {

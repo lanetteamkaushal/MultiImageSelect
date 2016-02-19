@@ -27,7 +27,6 @@ import com.example.lcom75.multiimageselect.customviews.PhotoPickerPhotoCell;
 import com.example.lcom75.multiimageselect.customviews.PhotoViewer;
 import com.example.lcom75.multiimageselect.customviews.ViewProxy;
 import com.example.lcom75.multiimageselect.tgnet.TLRPC;
-import com.example.lcom75.multiimageselect.volley.RequestQueue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,8 +55,6 @@ public class PhotoPickerActivity extends AppCompatActivity implements View.OnCli
 
         boolean didSelectVideo(String path);
     }
-
-    private RequestQueue requestQueue;
 
     private int type;
     private HashMap<String, AndroidUtilities.SearchImage> selectedWebPhotos;
@@ -153,9 +150,6 @@ public class PhotoPickerActivity extends AppCompatActivity implements View.OnCli
                     if (i < 0 || i >= arrayList.size()) {
                         return;
                     }
-                    PhotoViewer.getInstance().setParentActivity(PhotoPickerActivity.this);
-                    PhotoViewer.getInstance().openPhotoForSelect(arrayList, i, singlePhoto ? 1 : 0, PhotoPickerActivity.this, PhotoPickerActivity.this);
-                    PhotoViewer.getInstance().switchToEditMode(1);
                 }
             }
         });

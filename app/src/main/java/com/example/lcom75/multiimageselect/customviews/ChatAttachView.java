@@ -135,6 +135,17 @@ public class ChatAttachView extends FrameLayout implements NotificationCenter.No
         }
     }
 
+    public void selectItemAtPosition(int position){
+        try {
+            if (position < 0 || position >= mSelectedPhotos.size()) {
+                return;
+            }
+            photoAttachAdapter.setSelectedItem(position);
+            photoAttachAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     protected void onMeasure(int widthSpec, int heightSpec) {
         super.onMeasure(widthSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100), MeasureSpec.EXACTLY));

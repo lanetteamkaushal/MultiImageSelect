@@ -46,7 +46,7 @@ import android.widget.TextView;
 
 import com.example.lcom75.multiimageselect.AndroidUtilities;
 import com.example.lcom75.multiimageselect.ApplicationLoader;
-import com.example.lcom75.multiimageselect.MainActivity;
+import com.example.lcom75.multiimageselect.ImagePreviewActivity;
 import com.example.lcom75.multiimageselect.NotificationCenter;
 import com.example.lcom75.multiimageselect.Utilities;
 import com.example.lcom75.multiimageselect.tgnet.ConnectionsManager;
@@ -225,8 +225,8 @@ public class PhotoViewerList implements NotificationCenter.NotificationCenterDel
 
         @Override
         public void setAlpha(int alpha) {
-            if (parentActivity instanceof MainActivity) {
-//                ((MainActivity) parentActivity).drawerLayoutContainer.setAllowDrawContent(!isVisible || alpha != 255);
+            if (parentActivity instanceof ImagePreviewActivity) {
+//                ((ImagePreviewActivity) parentActivity).drawerLayoutContainer.setAllowDrawContent(!isVisible || alpha != 255);
             }
             super.setAlpha(alpha);
         }
